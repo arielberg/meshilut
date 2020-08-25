@@ -1,5 +1,7 @@
 import * as utils from './utils.js'; 
 import { commitFiles, contentItemForm, contentList , contentItemLoader} from './contentItem.mjs'; 
+import { menuBuilder } from './menu.mjs'; 
+import { rerenderer, rederCustomPages } from './rerender.mjs'; 
 import {doLogin} from './login.mjs'; 
 
 
@@ -39,17 +41,21 @@ export function routeToCall(){
         if( utils.getGlobalVariable('contentTypes').length > 0 ) {
           let contentTypesSingle = '(' + utils.getGlobalVariable('contentTypes').map(a=>a.name).join('|') +')';
           regexExpressions.itemManagment = new RegExp('#'+contentTypesSingle+'\\/([^\/]+)',"i");
-             
+          
           utils.getGlobalVariable('contentTypes').reverse().forEach(contentType => {
             document.getElementById('sidebarLinks').insertAdjacentHTML('afterbegin',  `
-              <li><h3>${contentType.labelPlural}</h3></li>
-              <li>
-                <a class="nav-link" href="#${contentType.name}/all">כל ${contentType.labelDefinedPlural}</a>
+              <li id='${contentType.name}_type_menu' class='contentTypeLinks'>
+                <h3>${contentType.labelPlural}</h3>
+                <ul>
+                  <li>
+                    <a class="nav-link" href="#${contentType.name}/all">${ utils.str('admin_ViewAllLink') }</a>
+                  </li>
+                  <li>
+                    <a class="nav-link" href="#${contentType.name}/new">${ utils.str('admin_AddNewLink') }</a>
+                  </li>
+                </ul>
               </li>
-              <li>
-                <a class="nav-link" href="#${contentType.name}/new">הוסף ${contentType.label} חדש</a>
-              </li>
-              <hr/>
+              <li><hr/></li>
             `);
           });
         }
@@ -91,11 +97,15 @@ export function routeToCall(){
       });
 
     break;
+    case '#menu'==hash:
+    case '#menus'==hash:
+      menuBuilder(document.getElementById('content'));
+    break;
+    case '#rerender'==hash:
+      rerenderer(document.getElementById('content'));
+    break;
     case '#translate'==hash:
       translationInterface(document.getElementById('content'));
-    break;
-    case '#admin/rebuildHTML'==hash:
-      rebuildHTML(document.getElementById('content'));
     break;
     case '#logout'==hash:
       localStorage.removeItem('token');
@@ -111,12 +121,10 @@ export function routeToCall(){
 
 /** Translation interface for 'static' string in pages */
 function translationInterface(parentElement) {
-  let translations = utils.getGlobalVariable('translations');
-  let appSettings = utils.getGlobalVariable('appSettings');
-  
+ 
   let fields = translations.filter(translationItem=>translationItem.ui==1)
                            .map( translationItem => `
-                              <h3>${translationItem.description} (${translationItem.key})</h3>
+                              <h3>${ ( translationItem.description ? translationItem.description + ' - ' : '' ) + translationItem.key }</h3>
                               ${ appSettings.Lanugages.map(langkey=> `<div class='langItem ${langkey}'>
                                 <label>${ appSettings.LanugageLabels[langkey] }</label>
                                 <textarea id='${ translationItem.key + '_' + langkey }'>${ translationItem.t[langkey] }</textarea>
@@ -126,106 +134,18 @@ function translationInterface(parentElement) {
   submit.innerText = 'Submit';
   submit.onclick = ()=>{
     translations.forEach(translationItem=>{
+      
       if ( translationItem.ui != 1 ) return;
+
+      // Load User Trnaslated String
       appSettings.Lanugages.forEach(langkey=> {
         translationItem.t[langkey] = document.getElementById(translationItem.key+'_'+langkey).value;
-      })
+      });
+
     });
 
-    let languages = ['','en'];
-    
-    let wrapperPath = 'templates/base.html';
-    fetch( wrapperPath )
-      .then(res=>res.text())
-      .then( pageWrapper => {
-
-        return languages.map(languageCode=>{
-          let linksPrefix = languageCode + (languageCode==''?'':'/');
-          let templates = [
-            { 
-              template:'front.page.html',
-              target:'index.html',
-              title:'frontPageTitle',
-              class:'frontPage'
-            },
-            { 
-              template:'about.page.html',
-              target:'about/index.html',
-              title:'aboutUsPageTitle',
-              class:'AboutUs'
-            },
-            { 
-              template:'news.page.html',
-              target:'in-the-news/index.html',
-              title:'newsPageTitle',
-              class:'news'
-            },
-            { 
-              template:'papers.page.html',
-              target:'position-papers/index.html',
-              title:'papersPageTitle',
-              class:'papers'
-            },
-            { 
-              template:'articles.page.html',
-              target:'posts/index.html',
-              title:'articlesPageTitle',
-              class:'articles'
-            },
-            { 
-              template:'media.page.html',
-              target:'media/index.html',
-              title:'mediaPageTitle',
-              class:'media'
-            },
-            { 
-              template:'contact.page.html',
-              target:'contact-us/index.html',
-              title:'contactPageTitle',
-              class:'contact'
-            },
-            { 
-              template:'donations.page.html',
-              target:'donations/index.html',
-              title:'donationsPageTitle',
-              class:'donations'
-            }
-          ];
-
-          let strings = {};        
-          translations.forEach(item => strings[item.key] = item.t[languageCode==''?'he':languageCode] );
-         
-          let templateVars = {
-              'strings': strings,
-              'site_url': appSettings['Site_Url'],
-              'direction':'rtl',
-              'linksPrefix': linksPrefix
-          };
-
-          return Promise.all(
-            templates.map( templateData => {
-              return fetch('templates/' + templateData.template )
-                    .then( res => res.text() )
-                    .then( template => 
-                      {  
-                        templateVars.pageClass = templateData.class;
-                        templateVars.pageTitle = strings[templateData.title];
-                        templateVars.content = new Function("return `" + template + "`;").call(templateVars); 
-
-                        return ({
-                          "content":  new Function("return `" + pageWrapper + "`;").call(templateVars),
-                          "filePath": linksPrefix + templateData.target,
-                          "encoding": "utf-8" 
-                        })
-                      })
-            })
-          )        
-        })
-      })
-      .then( filesResponses => Promise.all(filesResponses))
-      .then( filesResponses =>{ 
-        return filesResponses.reduce((filesResponses, val) => filesResponses.concat(val), []);
-      })
+    // render pages
+    rederCustomPages()
       .then( renderedFiles=> { renderedFiles.push( 
         {
           "content": JSON.stringify(translations),
@@ -269,49 +189,18 @@ function translationInterface(parentElement) {
 
 /* update page with translated strings */
 function translatePage( items ) {
-  let appSettings = utils.getGlobalVariable('appSettings'); 
+ 
   let translations = utils.getGlobalVariable('translations');
-
-  translations.forEach(translateItem=>{
-    var element = document.getElementById('t_'+translateItem.key);
-    if( element && translateItem.t[appSettings.Admin_Lanaguage]) {
-      element.innerText = translateItem.t[appSettings.Admin_Lanaguage];
+  
+  let language = utils.getAdminLanguage();
+  document.querySelectorAll('[data-stringid]').forEach(element => {
+    let stringId = element.getAttribute('data-stringid');
+    let translationItem = translations.find( t=>t.key == stringId );
+    if( translationItem && translationItem.t[language] ) {
+      element.innerText = translationItem.t[language];
     }
   })
   routeToCall();
-}
-
-/**
- * Rebuild items HTML pages from items Json.
- */
-function rebuildHTML(parentElement) {
-  let typeData = utils.getGlobalVariable('contentTypes');
-  let appSettings = utils.getGlobalVariable('appSettings');
-  let siteUrl = appSettings['Site_Url'];
-  let parent = document.createElement('div');
-  /* */
-  fetch('../search/post.json')
-    .then(response=>{
-      return response.json();
-    })
-    .then( searchItems=>{
-      return Promise.all(
-        searchItems
-          .map( searchItem => { 
-            return contentItemLoader('post', searchItem.id)
-                    .then( fetchedItem => fetchedItem.getRepositoryFiles() )
-          })
-      )       
-    })
-    .then( files =>{
-      files = [].concat.apply([], files);
-      commitFiles('Rebuild Posts', files)
-    }).then(res=> {
-      parentElement.innerHTML = 'Done!';
-    });
-  
- 
-  parentElement.innerHTML = 'Rebuilding.... Please Wait';
 }
 
 window.onload = function(e) { 

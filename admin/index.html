@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>התנועה למשילות - ניהול האתר</title>
+    <title>Site Managment</title>
     
     <link rel="stylesheet" href="style.css" ></link>
 
@@ -16,25 +16,30 @@
     <script src="scripts/suneditor/suneditor.min.js" type="module"></script>
     
 </head> 
-<body dir="rtl" class="">
+<body dir="ltr" class="">
   <div id='spinner'></div>
   <div id="pageWrapper" class="wrapper hideLeftBar">
    <!-- Sidebar -->
    <nav id="sidebar">
     <div class="sidebar-header">
-        <img style="max-width: 135px;max-height:100px;margin: 0 auto;display: block;" src="logo.png" />
-        <h3><a class="navbar-brand" href="#">התנועה למשילות - ניהול האתר</a></h3>
+        <h2 data-stringId='siteName' ></h2>
     </div>
 
     <ul id='sidebarLinks' class="list-unstyled components">
       <li>
-        <a id='t_translate' class="nav-link" href="#translate">Tranlate</a>
+        <a data-stringId='menus' class="nav-link" href="#menus">Menus</a>
+      </li>
+      <li>
+        <a data-stringId='translate' class="nav-link" href="#translate">Translation Interface</a>
+      </li>
+      <li>
+        <a data-stringId='rerender' class="nav-link" href="#rerender">Rebuild</a>
       </li>
       <li>
         <hr/>
       </li>
       <li>
-        <a id='t_logout' class="nav-link" href="#logout">Logout</a>
+        <a data-stringId='logout' class="nav-link" href="#logout">Logout</a>
       </li>
     </ul>
   </nav>
@@ -43,7 +48,7 @@
     <div id='messages'>
     </div>
     <div id="content">
-      טוען נתונים....
+      Loading Data.... Please wait
     </div>
   </div>
 </div>

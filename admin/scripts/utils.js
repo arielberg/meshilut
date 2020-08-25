@@ -65,7 +65,7 @@ export let loadSystemFile = function( variableName , filePath, onSuccess ) {
  */
 export let t = function( translationKey, language ) {
   let translations = getGlobalVariable('translations');
-  return translations.find(t=>t.key == translationKey ).t[ language==''?'he': language ]
+  return translations.find(t=>t.key == translationKey ).t[ language ]
 }
 
  /**
@@ -115,8 +115,30 @@ export let showMessage = function() {
   });
 }
 
+/**
+ * Get Admin selected language (as defined in systemSettings json)
+ */
+export let getAdminLanguage = function( ) {
+  let appSettings = getGlobalVariable('appSettings'); 
+  return appSettings.Admin_Lanaguage ? appSettings.Admin_Lanaguage : 'en';
+}
+
+/**
+ * Get Admin selected language (as defined in systemSettings json)
+ */
+export let str = function( key ) {
+  let translations = getGlobalVariable('translations');
+  let language = getAdminLanguage();
+  let translationItem = translations.find(t=>t.key == key );
+  if ( !translationItem ) return '';
+  if( translationItem.t[language] ) return translationItem.t[language];
+  return Object.values(translationItem.t)[0];
+}
+
+
 export let errorHandler = function( error ) {
-  console.log(error);
+
+  console.error(error);
 
   let errors = [];
   if ( localStorage.getItem('latest_errors' ) ) {
@@ -127,7 +149,7 @@ export let errorHandler = function( error ) {
   localStorage.setItem('latest_errors', JSON.stringify(errors) );
 
   if( error.message ) {
-    addMessage( error.message+' -- '+(new Error().stack) , 'danger');
+    addMessage( error.message , 'danger');
   }
   else {
     addMessage( error , 'danger');

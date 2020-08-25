@@ -23,7 +23,6 @@ export function contentItem ( contentType , ItemId ) {
   this.en = {};
 
   let appSettings = utils.getGlobalVariable('appSettings');
-  let siteUrl = appSettings['Site_Url'];
   let typeData = utils.getGlobalVariable('contentTypes').find ( ty => ty.name==contentType );
  
   /* when item is new - prevent from changing it's id to existing one */
@@ -47,7 +46,7 @@ export function contentItem ( contentType , ItemId ) {
     }
 
     if( existsItemsIds.indexOf(this.id) > -1 ) {
-      errors.id = 'This Id allready exists';
+      errors.id = 'This Id already exists';
     }
 
     if( !this.title ) {
@@ -79,10 +78,13 @@ export function contentItem ( contentType , ItemId ) {
   }
 
   this.renderField = ( fieldData, value , language ) => {
+    
+    if( value == '' || !value ) return '';
+
     let fieldContent = value;
     switch ( fieldData.type ) {
       case "image":
-        fieldContent = '<img src="'+value+'" />';
+        fieldContent = '<img src="/'+value+'" />';
       break;
       case "file":
         fieldContent = '<a href="'+value+'" >' + utils.t('viewFile', language) + '</a>';
@@ -92,7 +94,7 @@ export function contentItem ( contentType , ItemId ) {
   }
 
   this.getURL = returnAbsolutePath => {
-      return ( returnAbsolutePath ? siteUrl: '' ) + typeData.urlPrefix + this.id;
+      return (returnAbsolutePath ? '/' : '') + typeData.urlPrefix + this.id;
   }
 
   this.setFile = ( field, value ) => {
@@ -114,28 +116,30 @@ export function contentItem ( contentType , ItemId ) {
    */
   this.getRepositoryFiles = () => {
     /*** index.html ***/
-    // TODO: Take laguages from settings...
-    return renderPage(this, ['', 'en'])
-    .then(files => {
-      let itemToSave = JSON.parse(JSON.stringify(this));
-      delete itemToSave.attachments;
-      /*** index.json ***/
-      return files.concat([{
-        "content":  JSON.stringify(itemToSave),
-        "filePath": this.getURL(false)+'/index.json',
-        "encoding": "utf-8" 
-      }]);
-    })
-    /*** Add Attachments ***/
-    .then( files => {
-      if ( this.attachments.length == 0 )  return files;
-      let attachments = Object.keys(this.attachments).map( fieldName => ({
-          "content":  this.attachments[fieldName],
-          "filePath": this[fieldName],
-          "encoding": "base64" 
-      }));
-      return files.concat(attachments);
-    })
+    let appSettings = utils.getGlobalVariable('appSettings');
+    return renderPage(this, appSettings.Lanugages)
+            .then(files => {
+              let itemToSave = JSON.parse(JSON.stringify(this));
+              delete itemToSave.attachments;
+              delete itemToSave.isNew;
+              delete itemToSave.files;
+              /*** index.json ***/
+              return files.concat([{
+                "content":  JSON.stringify(itemToSave),
+                "filePath": this.getURL(false)+'/index.json',
+                "encoding": "utf-8" 
+              }]);
+            })
+            /*** Add Attachments ***/
+            .then( files => {
+              if ( this.attachments.length == 0 )  return files;
+              let attachments = Object.keys(this.attachments).map( fieldName => ({
+                  "content":  this.attachments[fieldName],
+                  "filePath": this[fieldName],
+                  "encoding": "base64" 
+              }));
+              return files.concat(attachments);
+            })
   }
   
   /**
@@ -162,37 +166,52 @@ export function contentItem ( contentType , ItemId ) {
   let renderPage = async function( editItemObj, languages , isDeleted ) {
 
     let translations = utils.getGlobalVariable('translations');
-       
+    let appSettings = utils.getGlobalVariable('appSettings');
+    let APIconnect = utils.getGlobalVariable('gitApi');
+ 
     return fetch('templates/base.html')
             .then(result=> result.text())
             .then( baseTemplate => {
-              return Promise.all( languages.map( language => {
+              // TODO: Support multiple menus
+              return APIconnect.getFile('/admin/menus/main.json')
+                                .then( menu => { return JSON.parse(menu) })
+                                .then( jsonMenu => {
+                return Promise.all( languages.map( language => {
 
-                let strings = {};        
-                translations.forEach(item => strings[item.key] = item.t[language==''?'he':language] );
+                  let menuHtml = '';
+                  if( jsonMenu[language] ) {
+                    menuHtml = `<ul class='navbar-nav'>
+                      ${ jsonMenu[language].map(i=>`<li><a href="${ i.url }">${ i.label }</a></li>`).join('') }
+                    </ul>`;
+                  }
 
-                let templateVars = {
-                    'strings': strings,
-                    'site_url':siteUrl,
-                    'direction':'rtl',
-                    'linksPrefix':  language + (language==''?'':'/'),
-                    'pageTitle': language=='' ? editItemObj.title: editItemObj[language].title,
-                    'pageClass': 'itemPage '+ editItemObj.type
-                } ;
-                if ( !isDeleted ) {
-                  templateVars.content = editItemObj.render(language);
-                }
-                else {
-                  templateVars.pageTitle = 'Page not found';
-                  templateVars.content = '';
-                }
-                
-                return {
-                  "content":  new Function("return `" + baseTemplate + "`;").call(templateVars),
-                  "filePath": (language!=''?language+'/':'')+editItemObj.getURL(false)+'/index.html',
-                  "encoding": "utf-8" 
-                }
-              }));
+                  let strings = {};        
+                  translations.forEach(item => strings[item.key] = item.t[language] );
+                  let isDefaultLanguage = language == appSettings.Default_Language;
+
+                  let templateVars = {
+                      'strings': strings,
+                      'menu_main': menuHtml,
+                      'direction':'rtl',
+                      'linksPrefix':  isDefaultLanguage ? '' : (language+'/'),
+                      'pageTitle': isDefaultLanguage ? editItemObj.title: editItemObj[language].title,
+                      'pageClass': 'itemPage '+ editItemObj.type + ' ' + editItemObj.type + editItemObj.id
+                  } ;
+                  if ( !isDeleted ) {
+                    templateVars.content = editItemObj.render( isDefaultLanguage ? '' : language );
+                  }
+                  else {
+                    templateVars.pageTitle = 'Page not found';
+                    templateVars.content = '';
+                  }
+                  
+                  return {
+                    "content":  new Function("return `" + baseTemplate + "`;").call(templateVars),
+                    "filePath": ( language == appSettings.Default_Language?'':language+'/')+editItemObj.getURL(false)+'/index.html',
+                    "encoding": "utf-8" 
+                  }
+                }));
+              })
             }) 
   }
 }
@@ -257,18 +276,15 @@ export async function contentItemLoader ( contentType , ItemId ) {
 export function contentItemForm ( contentType , editedItem , op ) {
   let wrapper = document.createElement('div');
   
-  let appSettings = utils.getGlobalVariable('appSettings');
-  let siteUrl = appSettings['Site_Url'];
-
   let typeData = utils.getGlobalVariable('contentTypes').find ( ty => ty.name==contentType );
   // Set Fields By OP type
   let formFields =  JSON.parse(JSON.stringify(typeData.fields));
 
   // Build node tabs
   let baseURL = '#' + contentType + '/' + editedItem.id + '/';
-  let links = [{ 'op':'edit', 'label':'עריכה' }];
+  let links = [{ 'op':'edit', 'label':'Edit' }];
   if ( true ) { // TODO: check i18n support
-    links.push({ 'op':'en', 'label':'תרגום' });
+    links.push({ 'op':'en', 'label':'Translate' });
   }
   links.push({ 'op':'seo', 'label':'SEO' });
   
@@ -276,10 +292,10 @@ export function contentItemForm ( contentType , editedItem , op ) {
     case 'delete':
       wrapper.innerHTML = `
         <div>
-          <h3>האם אתה בטוח שברצונך למחוק פריט זה?</h3>
+          <h3>Are you sure you want to delete this item?</h3>
           <div>
-            <button id='approveDelete'>כן</button>
-            <button className='cancel' onclick="location.href='#${ contentType }/all'">לא</button>
+            <button id='approveDelete'>Yes</button>
+            <button className='cancel' onclick="location.href='#${ contentType }/all'">No</button>
           </div>
         </div>`;
         wrapper.querySelector('#approveDelete').onclick = (event) => {
@@ -307,11 +323,11 @@ export function contentItemForm ( contentType , editedItem , op ) {
         switch( op ) {
           case 'edit':
             // Default fields 
-            formFields.unshift({ name: "title", label: "כותרת", type: "textfield"});
-            formFields.unshift({ name: "id", label: "מזהה", type: "id"});
+            formFields.unshift({ name: "title", label: utils.str('admin_fieldTitleLabel'), type: "textfield"});
+            formFields.unshift({ name: "id", label: ( editedItem.isNew ? utils.str('admin_fieldIdLabel'):utils.str('admin_fieldItemURL') ), type: "id"});
           break;
           case 'en':            
-            formFields.unshift({ name: "title", label: "כותרת", type: "textfield"});
+            formFields.unshift({ name: "title", label: utils.str('admin_fieldTitleLabel'), type: "textfield"});
             formFields = formFields
                           .filter( f=> ['image','file'].indexOf(f.type) == -1 )
                           .filter( f=> f.i18n !== false );
@@ -323,7 +339,7 @@ export function contentItemForm ( contentType , editedItem , op ) {
           break;
         }
 
-        wrapper.innerHTML = `<h1>עריכת ${typeData.label}</h1>
+        wrapper.innerHTML = `<h1>Edit ${typeData.label}</h1>
         <ul id="tabs" class="nav nav-tabs">
           ${ links.map(field=>
             `<li class="nav-item">
@@ -354,17 +370,18 @@ export function contentItemForm ( contentType , editedItem , op ) {
           fieldDiv.innerHTML = `<label>${ field.label }</label>`;
 
           switch(field.type){
-            case 'id': 
-              
-                inputField = document.createElement('input');
-                inputField.value = editedItem.id;
-                inputField.onkeyup = v => {
-                    urlPreview.innerText =  editedItem.getURL(true);
-                };
-                fieldDiv.appendChild(inputField);
+            case 'id':             
+              inputField = document.createElement('input');
+              inputField.value = editedItem.id;
+              inputField.onkeyup = v => {
+                  urlPreview.innerText =  editedItem.getURL(true);
+              };
+              fieldDiv.appendChild(inputField);
+             
               if ( !editedItem.isNew ) {
                 inputField.style.display = 'none';
               }
+
               let urlPreview = document.createElement('span');
               urlPreview.className = 'siteUrlPreview'
               urlPreview.innerText =  editedItem.getURL(true);
@@ -397,9 +414,10 @@ export function contentItemForm ( contentType , editedItem , op ) {
             break;
             case 'image':  
             case 'file':
-              if( field.type == 'image') {         
+              if( field.type == 'image') {  
+                // console.log(siteUrl);       
                 fieldDiv.innerHTML += `<div class='preview'>
-                  ${ editedItem[field.name]? `<img src="${ siteUrl + editedItem[field.name]}" />` : '' }
+                  ${ editedItem[field.name]? `<img src="${ '../' + editedItem[field.name]+'?t'+ ((new Date()).getTime()) }" />` : '' }
                 </div>`;
               }
               else {
@@ -456,11 +474,9 @@ export function contentItemForm ( contentType , editedItem , op ) {
                 
                 reader.readAsDataURL(this.files[0]);
               break;
-              case 'id':
-                console.log(inputField);
+              case 'id':                
+                editedItem.isNew = false;
                 editedItem.set(field.name, inputField.value , '');
-                console.log(editedItem);
-                location.hash = '#' + editedItem.type + '/'+ editedItem.id;
               break;
               default: 
                 editedItem.set(field.name, inputField.value , language);
@@ -470,6 +486,11 @@ export function contentItemForm ( contentType , editedItem , op ) {
             // revalidate field
             let errors = editedItem.validate();
             showErrors(errors , field.name );
+            
+            //Change hash to item URL
+            if ( !errors.id ) {
+              location.hash = '#' + editedItem.type + '/'+ editedItem.id;
+            }
           }
         });
               
@@ -477,17 +498,17 @@ export function contentItemForm ( contentType , editedItem , op ) {
        
         let submitButtons = document.createElement('div');
         let cancelButton = document.createElement('button');
-        cancelButton.innerText = 'בטל';
+        cancelButton.innerText = 'Cancel';
         cancelButton.className = 'cancel';
         cancelButton.onclick = ( ()=> {
-          if( confirm('האם אתה בטוח?') ) {
+          if( confirm('Are you sure?') ) {
             localStorage.removeItem(editedItem.type+'/' + editedItem.id);
             utils.gotoList(editedItem.type);
           }
         });
         let submitButton = document.createElement('button');
         submitButton.className = 'submit';
-        submitButton.innerText = 'שמור';
+        submitButton.innerText = 'save';
 
         /**
          * Submit item
@@ -641,8 +662,7 @@ export function contentList( parentElement, contentType ) {
     })
     .catch(exception=>{
       console.log(exception);
-      utils.errorHandler(exception);
-      return exception;
+      return [];
     })
     .then(items=>{
       if(items.length==0) {throw 'empty';}
@@ -652,18 +672,18 @@ export function contentList( parentElement, contentType ) {
                     <table>
                       <tr>
                         <th>#</th>
-                        <th>לינקים</th>
-                        <th>כותרת</th>                     
+                        <th>Title</th>
+                        <th>Links</th>                                             
                       </tr>
                       ${ items.reverse().map((item) => 
                         `<tr>
                           <td>${item.id}</td>
-                          <td>
-                            <a href=${'#' + contentType + '/'+item.id}>ערוך</a>
-                            <a style='margin-right:20px;' href=${'#' + contentType + '/'+item.id+'/delete'}>מחק</a>
-                          </td>
                           
                           <td>${item.title}</td>
+                          <td>                            
+                            <a href=${'#' + contentType + '/'+item.id}>Edit</a>                            
+                            <a style='margin-left:20px;' href=${'#' + contentType + '/'+item.id+'/delete'}>Delete</a>
+                          </td>
                           
                         </tr>` ).join("")}        
                     </table>
@@ -673,7 +693,7 @@ export function contentList( parentElement, contentType ) {
     .catch( exeption=>{
       parentElement.innerHTML = `<div>
       <h1>${pageTitle}</h1>
-      לא קיימים פריטים מסוג זה.
+      No Items
       </div>`;
     });
 }

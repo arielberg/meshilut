@@ -1,7 +1,5 @@
 import * as utils from './utils.js'; 
 import * as main from './script.mjs'; 
-import * as api from './GitHubAPI.mjs';
-
 
 /**
  * Handle login ( using GIT credentials )
@@ -13,23 +11,26 @@ export function doLogin( parentComponent ) {
    * When secret exists. Creates the GitAPI Object
    */
   let createAPIObject = function() {
-   
+  
     let appSettings = utils.getGlobalVariable('appSettings');
     let apiClassName = appSettings['API_Gate'];
 
-    // TODO: Support other APIs
+
     // invoke API class
-    api.getApi()
-        .then( api_gateway => {
-          utils.setGlobalVariable( 'gitApi', api );
-          document.getElementById('pageWrapper').classList.remove('hideLeftBar');
-          main.routeToCall();
-        })
-        .catch( errorMessage=> {
-          localStorage.removeItem('secret');
-          utils.loadLoginForm(errorMessage);
-        });
-  };
+    import('./api/'+apiClassName+'.mjs')
+      .then(api => {
+        return api.getApi()
+          .then( api_gateway => {
+            utils.setGlobalVariable( 'gitApi', api );
+            document.getElementById('pageWrapper').classList.remove('hideLeftBar');
+            main.routeToCall();
+          })
+          .catch( errorMessage=> {
+            localStorage.removeItem('secret');
+            utils.loadLoginForm(errorMessage);
+          });
+      })
+  }
 
   /**
    * Render the login form. should be called if secret not exists and re-render on 
@@ -39,11 +40,11 @@ export function doLogin( parentComponent ) {
   let loadLoginForm = function( errorMessage ) {
     // create login form
     parentComponent.innerHTML = `<form className='loginForm'>
-                                  <h3>התנועה למשילות - כניסה לממשק ניהול</h3>
+                                  <h3>Login</h3>
                                   ${ errorMessage ? `<div class="alert alert-danger" role="alert">${errorMessage}</div>` : '' }
-                                  <div><label>שם:</label><input name='name' type='text' placeholder='שם משתמש' /></div>
-                                  <div><label>סיסמא:</label><input name='password' type='text' placeholder='סיסמא' /></div>
-                                  <input type='submit' value='היכנס' />
+                                  <div><label>Name:</label><input name='name' type='text' placeholder='username' /></div>
+                                  <div><label>Password:</label><input name='password' type='text' placeholder='password' /></div>
+                                  <input type='submit' value='Login' />
                                 </form>`;
                               
     // form callback
