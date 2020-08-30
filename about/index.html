@@ -1,7 +1,6 @@
 <!DOCTYPE HTML>
 <html>
     <head>
-        <base href = "https://arielberg.github.io/meshilut/" />
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="stylesheet" type="text/css" href="assets/css/style.css">
@@ -21,37 +20,10 @@
                     <img width="120px" src="assets/images/logo.png" />
                 </a>
             </div>
-            <nav
-                class="elementor-nav-menu--main elementor-nav-menu__container elementor-nav-menu--layout-horizontal e--pointer-underline e--animation-drop-out">
-                <ul id="menu-1-6281c074" class="elementor-nav-menu">
-                    <li class="menu-item menu-item-type-post_type menu-item-object-page">
-                        <a href="about/" class="elementor-item">מי אנחנו?</a>
-                    </li>
-                    <li class="menu-item menu-item-type-post_type menu-item-object-page">
-                        <a href="in-the-news/" class="elementor-item">התנועה בחדשות</a>
-                    </li>
-                    <li class="menu-item menu-item-type-post_type menu-item-object-page8">
-                        <a href="position-papers/" class="elementor-item">ניירות עמדה ומדיניות</a>
-                    </li>
-                    <li class="menu-item menu-item-type-taxonomy menu-item-object-category">
-                        <a href="posts/" class="elementor-item">כתבות</a>          
-                    </li>
-                    <li class="menu-item menu-item-type-post_type menu-item-object-page">
-                        <a href="media/" class="elementor-item">מדיה</a>
-                    </li>
-                    <li class="menu-item menu-item-type-post_type menu-item-object-page">
-                        <a href="contact-us/" class="elementor-item">צור קשר</a>                               
-                    </li>
-                    <li class="menu-item menu-item-type-post_type menu-item-object-page">
-                        <a href="donations/" class="elementor-item">תרומות</a>   
-                    </li>
-                    <li class="menu-item menu-item-type-post_type menu-item-object-page">
-                        <a href="en/" class="elementor-item">English</a>   
-                    </li>
-                    <li class="searchLink">
-                        <a href="/search/" class="elementor-item">חיפוש</a>   
-                    </li>
-                </ul>
+            <nav class="collapse navbar-collapse" id="mainMenu">
+                <ul class='navbar-nav'>
+                                <li><a href="about">מי אנחנו?</a></li><li><a href="in-the-news">התנועה בחדשות</a></li><li><a href="position-papers">ניירות עמדה ומדיניות</a></li><li><a href="posts">כתבות</a></li><li><a href="media">מדיה</a></li><li><a href="contact-us">צור קשר</a></li><li><a href="donations">תרומות</a></li><li><a href="en">English</a></li>
+                                </ul>
             </nav>
             <div class="search-form">
                 <form action="">
@@ -70,7 +42,8 @@
     <h3>הצוות שלנו</h3>        
     <div id='members'></div>
     <script>
-        fetch('search/member.json')
+        let basePath = location.origin ;
+        fetch( basePath + '/search/member.json')
         .then(r=>r.json())
         .then(members=>{ 
             members.forEach( memberData => {
@@ -78,7 +51,7 @@
                 member.className = "member";
                 
                 let img = document.createElement('img');
-                img.src = memberData.img;
+                img.src = basePath + '/' + memberData.img;
                 member.appendChild(img);
 
                 let title = document.createElement('h4');
@@ -100,5 +73,41 @@
     <div>התנועה עוסקת בשמירת האיזונים בין מרכיבי הדמוקרטיה השונים במדינת ישראל: הכרעת הרוב, זכויות הפרט, הגינות שלטונית ושקיפות.<br></div><div><br></div><p>המוסד עוקב, חוקר, מפרסם, מקדם חקיקה ורפורמות בממשק שבין הרשות הנבחרת, המבטאת את הכרעות הרוב ואת היותה של ישראל מדינה יהודית לבין הרשות השופטת המופקדת על זכיות הפרט, מניעת שחיתות ושלטון החוק. </p><p>בשנים האחרונות היטשטשו הגבולות בין המערכת המשפטית על שלוחותיה השונות לבין סמכות נבחרי הציבור. המערכת המשפטית החלה לעסוק בהכרעות ערכיות, מוסריות ופוליטיות דבר יום ביומו. כוחם של נושאי תפקידים במערכת המשפט גובר לעיתים על כוחן של הממשלה והכנסת ונבחרי הציבור מוצאים את עצמם מנועים מלקדם ולבצע את המדיניות שלשמה נבחרו.</p><p>התנהלות זו פוגעת בעיקרון הכרעת הרוב שבדמוקרטיה שכן רצון העם נחסם ע"י מערכת בלתי נבחרת אשר כופה את ערכיה ועמדותיה על הכלל. בנוסף פוגעת התנהלות זו בתפקידיה העיקריים של מערכת המשפט, שכן ההתעסקות של המערכת בנושאים שאינם בתחומה מובילה להזנחת  הנושאים שאמורים להיות בליבת פעילותה.</p><p>ריכוז גדול מדי של עוצמה וסמכויות בידי המערכת המשפטית פוגע בעקרון הפרדת הרשויות ועלול להביא לפגיעה בטוהר המידות ובמינהל התקין של מערכות המדינה.</p><p>אנו התנועה למשילות ודמוקרטיה סבורים כי אמון הציבור הינו תנאי בסיסי לעצמאותה ולקיומה של מערכת המשפט. עיסוקה של מערכת המשפט בשאלות ערכיות, שמעצם טיבן שנויות במחלוקת ציבורית ופוליטית, מחלישה ומעמידה בסימן שאלה את אמון הציבור במערכת.</p><p>אנו סבורים כי מדינת ישראל זקוקה למערכת משפטית איתנה ואיכותית אשר עושה מלאכתה נאמנה.</p><p>אנו פועלים לחיזוק המשילות ומנסים להשיב את מערכת המשפט למקומה הראוי תוך מתן כח לנבחרי הציבור לקיים מדיניות המשקפת את רצון בוחריהם, העם  במדינת ישראל.</p><p>התנועה עוסקת בשמירת האיזונים בין מרכיבי הדמוקרטיה השונים במדינת ישראל: הכרעת הרוב, זכויות הפרט, הגינות שלטונית ושקיפות.</p><p>המוסד עוקב, חוקר, מפרסם, מקדם חקיקה ורפורמות בממשק שבין הרשות הנבחרת, המבטאת את הכרעות הרוב ואת היותה של ישראל מדינה יהודית לבין הרשות השופטת המופקדת על זכיות הפרט, מניעת שחיתות ושלטון החוק. </p>
 </section>
     </main>
+    <script>
+        function isDescendant(parent, child) {
+            var node = child.parentNode;
+            while (node != null) {
+                if (node == parent) {
+                    return true;
+                }
+                node = node.parentNode;
+            }
+            return false;
+       }
+       
+        // fix for github pages:
+        let devPatterns = [/(.*)github.io\/([^/]*)/ , /(.*):8080/ ];
+        let mainSection = document.getElementById('main');
+        devPatterns.forEach(function(devPattern){
+            let matchGitHubPages = window.location.href.match(devPattern);
+            if ( matchGitHubPages ) {
+                document.querySelectorAll('[href]').forEach(s=>{
+                    if( s.href ) { 
+                        if(!isDescendant(mainSection, s)) {
+                            s.href = s.href.replace( ( location.origin + location.pathname), matchGitHubPages[0]+'/');
+                        }
+                    }
+                });
+        
+                document.querySelectorAll('[src]').forEach( s => {
+                    if( s.src ) { 
+                        if(!isDescendant(mainSection, s)) {
+                            s.src = s.src.replace( ( location.origin + location.pathname), matchGitHubPages[0] + '/' );
+                        }
+                    }
+                });
+            }
+        });
+      </script>
 </body>
 </html>

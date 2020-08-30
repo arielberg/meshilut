@@ -1,5 +1,6 @@
-<script>
-    fetch('search/post.json')
+<script> 
+    let basePath = location.origin ;
+    fetch( basePath + 'search/post.json')
         .then(res=>res.json())
         .then(jsonItems=>{
             jsonItems.reverse().forEach( jsonItem => {

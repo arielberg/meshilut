@@ -1,5 +1,6 @@
 <script>
-    fetch('search/papers.json')
+    let basePath = location.origin ;
+    fetch( basePath + 'search/papers.json')
         .then(res=>res.json())
         .then(jsonItems=>{
             jsonItems.forEach( jsonItem => {

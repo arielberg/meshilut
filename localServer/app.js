@@ -44,6 +44,7 @@ const server = http.createServer((req, res) => {
         }
         
         let files = JSON.parse(body);
+        
         files.forEach( fileData => {
 
           let fileLocalPath = __dirname.replace('localServer','')+'/'+fileData.filePath;
