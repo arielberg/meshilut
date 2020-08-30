@@ -108,7 +108,7 @@ export function rederCustomPages() {
                             let menuHtml = '';
                             if( jsonMenu[languageCode] ) {
                                 menuHtml = `<ul class='navbar-nav'>
-                                ${ jsonMenu[languageCode].map(i=>`<li><a href="${ i.url }">${ i.label }</a></li>`).join('') }
+                                ${ jsonMenu[languageCode].map(i=>`<li><a href="/${ i.url }">${ i.label }</a></li>`).join('') }
                                 </ul>`;
                             }
                             
