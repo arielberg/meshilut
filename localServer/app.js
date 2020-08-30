@@ -48,13 +48,13 @@ const server = http.createServer((req, res) => {
         files.forEach( fileData => {
 
           let fileLocalPath = __dirname.replace('localServer','')+'/'+fileData.filePath;
-
+          
           if ( fileData.encoding == 'base64' ) {
             var buf = Buffer.from(fileData.content, 'base64');
             fs.writeFileSync(fileLocalPath, buf);
           }
-          else {   
-            fs.mkdir( require('path').dirname(fileLocalPath) , { recursive: true }, (err) => { });
+          else {              
+            fs.mkdir( require('path').dirname(fileLocalPath).replace('//','/') , { recursive: true }, (err) => { });
             fs.writeFileSync( fileLocalPath, fileData.content, (err,data) => {});
           }
         });  
