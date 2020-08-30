@@ -57,7 +57,7 @@
                 itemTeaser.innerText = jsonItem.body.substring(0, 250);
                 itemContent.append(itemTeaser);
                 let link = document.createElement('a');
-                link.href = '/'+jsonItem.href;
+                link.href = '/'+(jsonItem.href ? jsonItem.href : 'post/' + jsonItem.id);
                 link.className = 'readMore';
                 link.innerText = 'קרא עוד';
                 itemContent.append(link);
