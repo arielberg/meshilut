@@ -1,6 +1,6 @@
 <script>
     let basePath = location.origin ;
-    fetch( basePath + 'search/news-item.json')
+    fetch( basePath + '/search/news-item.json')
         .then(res=>res.json())
         .then(res=>{
             res.forEach(resultItem=>{
