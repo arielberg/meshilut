@@ -12,6 +12,7 @@
         { "template":"articles.page.html", "title": "מאמרים", "class": "posts", "parentTempalte":"base.html", "url":"posts/index.html" },
         { "template":"contact.page.html", "title": "צור קשר", "class": "contact", "parentTempalte":"base.html", "url":"contact-us/index.html" },
         { "template":"donations.page.html", "title": "השותפות שלכם חשובה לנו", "class": "donations", "parentTempalte":"base.html", "url":"donations/index.html" },
+        { "template":"media.page.html", "title": "מדיה", "class": "media",  "parentTempalte":"base.html", "url":"media/index.html" },
         { "template":"search.page.html", "title": "Search Results", "class": "searchPage",  "parentTempalte":"base.html", "url":"search/index.html" }
     ]
 }
