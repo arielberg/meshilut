@@ -46,36 +46,20 @@
 </section> 
     </main>
     <script>
-        function isDescendant(parent, child) {
-            var node = child.parentNode;
-            while (node != null) {
-                if (node == parent) {
-                    return true;
-                }
-                node = node.parentNode;
-            }
-            return false;
-       }
-       
         // fix for github pages:
-        let devPatterns = [/(.*)github.io\/([^/]*)/ , /(.*):8080/ ];
-        let mainSection = document.getElementById('main');
+        let devPatterns = [/(.*)github.io\/([^/]*)/ ];
         devPatterns.forEach(function(devPattern){
             let matchGitHubPages = window.location.href.match(devPattern);
             if ( matchGitHubPages ) {
                 document.querySelectorAll('[href]').forEach(s=>{
                     if( s.href ) { 
-                        if(!isDescendant(mainSection, s)) {
-                            s.href = s.href.replace( ( location.origin + location.pathname), matchGitHubPages[0]+'/');
-                        }
+                        s.href = s.href.replace( ( location.origin + location.pathname), matchGitHubPages[0]+'/');
                     }
                 });
         
                 document.querySelectorAll('[src]').forEach( s => {
                     if( s.src ) { 
-                        if(!isDescendant(mainSection, s)) {
-                            s.src = s.src.replace( ( location.origin + location.pathname), matchGitHubPages[0] + '/' );
-                        }
+                        s.src = s.src.replace( ( location.origin + location.pathname), matchGitHubPages[0] + '/' );
                     }
                 });
             }
