@@ -5,7 +5,7 @@
         { "url":"posts", "label":"Posts"}
     ],
     "he":[
-        { "url":"about-us", "label":"מי אנחנו?"},
+        { "url":"about", "label":"מי אנחנו?"},
         { "url":"in-the-news", "label":"התנועה בחדשות"},
         { "url":"position-papers", "label":"ניירות עמדה ומדיניות"},
         { "url":"posts", "label":"כתבות"},

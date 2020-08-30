@@ -94,6 +94,8 @@
 #head nav {
   display: flex;
   flex: 1;
+  padding-right: 0px;
+  margin-right: 0px;
 }
 #head .search-form form {
   margin-top: 30px;

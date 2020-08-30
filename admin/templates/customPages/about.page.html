@@ -2,7 +2,8 @@
     <h3>הצוות שלנו</h3>        
     <div id='members'></div>
     <script>
-        fetch('search/member.json')
+        let basePath = location.origin ;
+        fetch( basePath + '/search/member.json')
         .then(r=>r.json())
         .then(members=>{ 
             members.forEach( memberData => {
@@ -10,7 +11,7 @@
                 member.className = "member";
                 
                 let img = document.createElement('img');
-                img.src = memberData.img;
+                img.src = basePath + '/' + memberData.img;
                 member.appendChild(img);
 
                 let title = document.createElement('h4');
