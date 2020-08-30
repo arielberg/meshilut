@@ -16,7 +16,7 @@
     <header id="head">
         <div class="inner">
             <div id="logo">
-                <a href="en/">
+                <a href="/">
                     <img width="120px" src="/assets/images/logo.png" />
                 </a>
             </div>
@@ -40,7 +40,7 @@
         </section>
         <script> 
     let basePath = location.origin ;
-    fetch( basePath + 'search/post.json')
+    fetch( basePath + '/search/post.json')
         .then(res=>res.json())
         .then(jsonItems=>{
             jsonItems.reverse().forEach( jsonItem => {
