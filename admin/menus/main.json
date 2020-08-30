@@ -3,5 +3,15 @@
         { "url":"", "label":"Home"},
         { "url":"about-us", "label":"About Us"},
         { "url":"posts", "label":"Posts"}
+    ],
+    "he":[
+        { "url":"about-us", "label":"מי אנחנו?"},
+        { "url":"in-the-news", "label":"התנועה בחדשות"},
+        { "url":"position-papers", "label":"ניירות עמדה ומדיניות"},
+        { "url":"posts", "label":"כתבות"},
+        { "url":"media", "label":"מדיה"},
+        { "url":"contact-us", "label":"צור קשר"},
+        { "url":"donations", "label":"תרומות"},
+        { "url":"en", "label":"English"}
     ]
 }
