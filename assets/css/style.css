@@ -544,18 +544,21 @@ body.AboutUs #members {
   #head nav ul {
       margin:90px 0 0;
       padding: 0;
-      width: 100%;
+      width: 100vw;
+      position: absolute;
+      right: 0;;
   }
 
-  #head nav a , #head nav li {
+  #head nav li {
     width: 100%;
-    background: rgba(10,40,80,0.75);
+    background: rgba(40,120,160,0.96);
     border-bottom: 1px solid #fff;
-}
+  }
 
   #head nav a {
     padding: 0 36px 20px;
     border-bottom: 1px solid #666;
+    font-weight:bold;
   }
 
   #head nav li:hover a {
