@@ -577,10 +577,10 @@ body.AboutUs #members {
   }
   
   #head nav {
-    display: none;
+    display: none !important;
   }
 
   #head nav.open {
-    display: block;
+    display: block !important;
   }
 }
