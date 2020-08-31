@@ -1,10 +1,10 @@
-<link rel="stylesheet" type="text/css" href="assets/css/index.css">
+<link rel="stylesheet" type="text/css" href="/assets/css/index.css">
 <section class="movie1">
     <video autoplay muted loop id="myVideo" class="video-bgr">
-        <source src="assets/images/videoplayback.mp4" type="video/mp4">
+        <source src="/assets/images/videoplayback.mp4" type="video/mp4">
         Your browser does not support HTML5 video.
     </video> 
-    <img src="assets/images/logo.png"/> 
+    <img src="/assets/images/logo.png"/> 
     
     <svg class="shape-bottom" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 283.5 19.6" preserveAspectRatio="none" data-negative="false">
         <path class="shape-fill" style="opacity:0.33" d="M0 0L0 18.8 141.8 4.1 283.5 18.8 283.5 0z"></path>
@@ -37,8 +37,8 @@
             ${ this.strings.fp_block2 }
         </div>
         <div class="img-wrap col2">
-            <img src="assets/images/motives.jpg" alt=""/> 
-            <img src="assets/images/motives2.jpg" alt=""/> 
+            <img src="/assets/images/motives.jpg" alt=""/> 
+            <img src="/assets/images/motives2.jpg" alt=""/> 
         </div>
     </div>
             
@@ -90,7 +90,7 @@
                 .slice( 0, 9 )
                 .forEach( jsonItem => {
                     let article = document.createElement('article');
-                    article.style.backgroundImage = 'url('+(jsonItem.image?jsonItem.image:'assets/images/post_default.jpeg')+')';
+                    article.style.backgroundImage = 'url('+(jsonItem.image?jsonItem.image:'/assets/images/post_default.jpeg')+')';
                     let link = document.createElement('a');
                     link.href = jsonItem.href;
                     link.innerText = jsonItem.title;;
