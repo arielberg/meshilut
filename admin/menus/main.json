@@ -1,8 +1,8 @@
 { 
     "en":[
-        { "url":"", "label":"Home"},
-        { "url":"about-us", "label":"About Us"},
-        { "url":"posts", "label":"Posts"}
+        { "url":"en/about", "label":"About Us"},
+        { "url":"en/posts", "label":"Posts"},
+        { "url":"", "label":"עברית"}
     ],
     "he":[
         { "url":"about", "label":"מי אנחנו?"},

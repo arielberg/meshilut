@@ -1,8 +1,9 @@
 {
     "en": [
         { "template":"front.page.html", "title": "Home Page", "class": "frontPage", "parentTempalte":"base.html", "url":"en/index.html" },
-        { "template":"articles.page.html", "title": "All Posts", "class": "posts", "parentTempalte":"base.html", "url":"posts/index.html" },
-        { "template":"search.page.html", "title": "Search Results", "class": "searchPage",  "parentTempalte":"base.html", "url":"search/index.html" }
+        { "template":"about.page.html", "title": "מי אנחנו", "class": "AboutUs", "parentTempalte":"base.html", "url":"en/about/index.html" },
+        { "template":"articles.page.html", "title": "All Posts", "class": "posts", "parentTempalte":"base.html", "url":"en/posts/index.html" },
+        { "template":"search.page.html", "title": "Search Results", "class": "searchPage",  "parentTempalte":"base.html", "url":"en/search/index.html" }
     ], 
     "he": [
         { "template":"front.page.html", "title": "דף הבית", "class": "frontPage", "parentTempalte":"base.html", "url":"index.html" },
