@@ -170,6 +170,7 @@ h3, h2 {
 body.itemPage img {
     float: right;
     margin-left: 20px;
+    max-width: 450px;
 }
 
 .result-card .summary {
