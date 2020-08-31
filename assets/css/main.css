@@ -152,7 +152,7 @@ h3, h2 {
 }
 
 .result-card > div {
-    max-width: 700px;
+    max-width: 820px;
 }
 
 .result-card img {
@@ -160,11 +160,14 @@ h3, h2 {
     max-height: 100px;
     margin-left: 20px;
 }
-.result-card .readMore {
+.result-card .readMore , 
+.readMore {
     display: block;
     text-align: left;
     border-radius: 20px;
     padding: 5px;
+    width: 100%;
+    padding-left: 29px;
 }
 
 body.itemPage img {

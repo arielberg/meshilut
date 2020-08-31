@@ -40,7 +40,7 @@
         </section>
         <script>
     let basePath = location.origin ;
-    fetch( basePath + 'search/papers.json')
+    fetch( basePath + '/search/papers.json')
         .then(res=>res.json())
         .then(jsonItems=>{
             jsonItems.forEach( jsonItem => {
@@ -52,6 +52,11 @@
                 let itemTeaser = document.createElement('span');
                 itemTeaser.innerText = jsonItem.body;
                 itemDiv.append(itemTeaser);
+                let paperLink = document.createElement('a');
+                paperLink.className = 'readMore paperLink';
+                paperLink.href = '/'+jsonItem.paper;
+                paperLink.innerText = 'לקריאה';
+                itemDiv.append(paperLink);
                 document.getElementById('main').appendChild(itemDiv);
             });                
         });        
