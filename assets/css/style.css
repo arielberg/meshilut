@@ -545,6 +545,10 @@ body.AboutUs #members {
     width: 560px;
     margin: 0 auto;
 }
+.newsGrid {
+  display: grid;
+  grid-template-columns: auto auto auto;
+}
 
 @media only screen and  (max-width: 1200px){ 
 
@@ -625,5 +629,7 @@ body.AboutUs #members {
   body.itemPage.post img {
     max-width: 220px;
   }
-
+  .newsGrid {
+    grid-template-columns: auto auto;
+  }
 }

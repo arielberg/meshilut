@@ -212,10 +212,19 @@ body.news #main .result-card img {
     max-height: 150px;
 }
 
+body.news h3 {
+    margin-bottom:30px;
+    font-weight: bold;
+    color: #3e5164;
+    width:100%;
+    border-bottom:1px dotted #ddd;
+    padding-top:10px;
+}
+
 body.news #main .result-card {
     width: 250px;
     display: inline-block;
-    margin: 0 0 20px 29px;
+    margin: 0 auto 50px;
     vertical-align: top;
     height: 280px;
 }

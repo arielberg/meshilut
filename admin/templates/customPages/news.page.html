@@ -9,7 +9,7 @@
             return res;
         })
         .then(res=>{
-            return res.sort((a, b)=>{ return a.date >b.date });
+            return res.sort((a, b)=>{ return b.date - a.date });
         })
         .then(jsonItems=>{
             let currentYear = '';
@@ -23,15 +23,18 @@
                 link.className = 'result-card';
                 link.innerHTML = '<img src="' + basePath + '/assets/images/'+ jsonItem.publisher + '.png" ><span>' + jsonItem.title +'</span>';
                 
-                
-                let yearDiv = document.getElementById('year_'+itemYear);
-                if ( !yearDiv ) {
-                    yearDiv = document.createElement('div');
+                let yearContainer =  document.getElementById('year_'+itemYear+'_container');
+                if ( !yearContainer ) {
+                    let yearDiv = document.createElement('div');
                     yearDiv.id = 'year_'+itemYear;
                     yearDiv.innerHTML = '<h3>'+ itemYear + '</h3>';
                     document.getElementById('main').appendChild(yearDiv);
+                    yearContainer = document.createElement('div');
+                    yearContainer.id = 'year_'+itemYear+'_container';
+                    yearContainer.className = 'newsGrid';
+                    yearDiv.appendChild(yearContainer);
                 }
-                yearDiv.appendChild(link);
+                yearContainer.appendChild(link);
 
             });                
         }); 
