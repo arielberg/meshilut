@@ -34,7 +34,7 @@ body.AboutUs #main section.about img, body.frontPage #main section.movie1 img {
     color: rgb(255, 255, 255);
     margin-bottom: -1150px;
     background-position: 0px center;
-    padding: 100px 100px 250px;
+    padding: 100px 100px 0;
 }
 body.AboutUs  {
     background-color: #B3C0B7;
@@ -152,7 +152,7 @@ h3, h2 {
 }
 
 .result-card > div {
-    max-width: 820px;
+    max-width: 765px;
 }
 
 .result-card img {
@@ -173,7 +173,7 @@ h3, h2 {
 body.itemPage img {
     float: right;
     margin-left: 20px;
-    max-width: 450px;
+    max-width: 380px;
 }
 
 .result-card .summary {
