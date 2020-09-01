@@ -457,6 +457,10 @@ body.contact {
   background-color:#efe8d8;
 }
 
+body.joinUs {
+  background-color:#f0efaff;
+}
+
 body.donations #main p {
   color: #ffffff;
   font-family: "Arimo", Sans-serif;
@@ -480,7 +484,8 @@ body.AboutUs #main {
 
 body.AboutUs #main::before , 
 body.donations #main::before,
-body.contact #main::before {
+body.contact #main::before,
+body.joinUs #main::before {
   content: ' ';
   display: block;
   position: absolute;
@@ -495,6 +500,19 @@ body.contact #main::before {
   background-repeat: no-repeat;
   background-color: #222;
   z-index: -1;
+}
+
+body.joinUs #main::before {
+  height: 350px;
+}
+body.joinUs #main section.title h1 {
+  color: #6ec1e4;
+  font-size: 80px;
+  font-family: "Amatic SC", Sans-serif;
+  font-weight: 600;
+  text-align: center;
+  border-bottom: 0 none;
+  line-height: 200px;
 }
 
 body.AboutUs #main::after {  
