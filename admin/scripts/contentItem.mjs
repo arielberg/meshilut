@@ -181,7 +181,7 @@ export function contentItem ( contentType , ItemId ) {
                   let menuHtml = '';
                   if( jsonMenu[language] ) {
                     menuHtml = `<ul class='navbar-nav'>
-                      ${ jsonMenu[language].map(i=>`<li><a href="${ i.url }">${ i.label }</a></li>`).join('') }
+                      ${ jsonMenu[language].map(i=>`<li><a href="/${ i.url }">${ i.label }</a></li>`).join('') }
                     </ul>`;
                   }
 
