@@ -1,4 +1,3 @@
 [
-    { "name":"og:title", "label":"SEO - כותרת", "placeholder":"כותרת הפריט לאינדוקס על ידי מנועי חיפוש" , "type":"textfield"},
     { "name":"description", "label":"SEO - תיאור", "placeholder":"תיאור הפריט לאינדוקס על ידי מנועי חיפוש" , "type":"textfield"}
 ]

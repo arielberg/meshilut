@@ -188,15 +188,21 @@ export function contentItem ( contentType , ItemId ) {
                   let strings = {};        
                   translations.forEach(item => strings[item.key] = item.t[language] );
                   let isDefaultLanguage = language == appSettings.Default_Language;
-
+                  
                   let templateVars = {
                       'strings': strings,
                       'menu_main': menuHtml,
                       'direction':'rtl',
                       'linksPrefix':  isDefaultLanguage ? '' : (language+'/'),
                       'pageTitle': isDefaultLanguage ? editItemObj.title: editItemObj[language].title,
+                      'pageDescription':'',
                       'pageClass': 'itemPage '+ editItemObj.type + ' ' + editItemObj.type + editItemObj.id
                   } ;
+
+                  if ( editItemObj.seo.description ) {
+                    templateVars.pageDescription = editItemObj.seo.description;
+                  }
+
                   if ( !isDeleted ) {
                     templateVars.content = editItemObj.render( isDefaultLanguage ? '' : language );
                   }
