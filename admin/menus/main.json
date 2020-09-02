@@ -11,7 +11,8 @@
         { "url":"posts", "label":"כתבות"},
         { "url":"media", "label":"מדיה"},
         { "url":"contact-us", "label":"צור קשר"},
-        { "url":"donations", "label":"תרומות"},
+        { "url":"join-us", "label":"להצטרפות"},
+        { "url":"donations", "label":"לתרומות"},
         { "url":"en", "label":"English"}
     ]
 }
