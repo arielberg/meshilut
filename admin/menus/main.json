@@ -7,12 +7,12 @@
     "he":[
         { "url":"about", "label":"מי אנחנו?"},
         { "url":"in-the-news", "label":"התנועה בחדשות"},
-        { "url":"position-papers", "label":"ניירות עמדה ומדיניות"},
-        { "url":"posts", "label":"כתבות"},
-        { "url":"media", "label":"מדיה"},
+        { "url":"position-papers", "label":"ניירות עמדה ומחקרים"},
+        { "url":"posts", "label":"מאמרים"},
+        { "url":"media", "label":"וידיאו"},
         { "url":"contact-us", "label":"צור קשר"},
         { "url":"join-us", "label":"להצטרפות"},
-        { "url":"donations", "label":"לתרומות"},
+        { "url":"donations", "label":"לתרומה"},
         { "url":"en", "label":"English"}
     ]
 }
