@@ -43,5 +43,15 @@
             {"name":"body","label":"תקציר","type":"wysiwyg", "placeholder":"גוף הפוסט"},
             {"name":"paper","label":"מסמך","type":"file", "i18n": false}
         ]
+    },
+    {  
+        "name":"massages",
+        "label":"הודעת תנועה",
+        "urlPrefix":"massages/",
+        "labelPlural":"הודעות תנועה",
+        "labelDefinedPlural":"הודעות התנועה",
+        "fields":[
+            {"name":"body","label":"הודעה","type":"wysiwyg", "placeholder":"גוף הודעה"}
+        ]
     }
 ]
