@@ -2,11 +2,22 @@
     let basePath = location.origin ;
     fetch( basePath + '/search/messages.json')
         .then(res=>res.json())
-        .then(res=>{
-            jsonItems.forEach( jsonItem => {
-                console.log(jsonItem );
-
-            });                
-        }); 
-
+        .then(res=>res.reverse())
+        .then( res => {
+            res.forEach( jsonItem=>{
+                console.log(jsonItem);
+                let itemDiv = document.createElement('div');
+                itemDiv.className = "result-card";
+                let itemContent = document.createElement('div');
+                let itemTitle = document.createElement('h3');
+                itemTitle.onclick = e => { window.location = itemURL }
+                itemTitle.innerText = jsonItem.title;
+                itemContent.append(itemTitle);
+                let itemTeaser = document.createElement('span');
+                itemTeaser.innerText = jsonItem.body;
+                itemContent.append(itemTeaser);
+                itemDiv.append(itemContent);
+                document.getElementById('main').appendChild(itemDiv);
+            })
+        });
 </script>
