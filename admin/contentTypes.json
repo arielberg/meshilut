@@ -45,9 +45,9 @@
         ]
     },
     {  
-        "name":"massages",
+        "name":"messages",
         "label":"הודעת תנועה",
-        "urlPrefix":"massages/",
+        "urlPrefix":"messages/",
         "labelPlural":"הודעות תנועה",
         "labelDefinedPlural":"הודעות התנועה",
         "fields":[

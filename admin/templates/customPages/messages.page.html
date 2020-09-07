@@ -1,0 +1,12 @@
+<script>
+    let basePath = location.origin ;
+    fetch( basePath + '/search/messages.json')
+        .then(res=>res.json())
+        .then(res=>{
+            jsonItems.forEach( jsonItem => {
+                console.log(jsonItem );
+
+            });                
+        }); 
+
+</script>
