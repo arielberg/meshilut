@@ -663,4 +663,9 @@ body.AboutUs #members {
   .newsGrid {
     grid-template-columns: auto auto;
   }
+
+  body #main section.three-widgets {
+    display: inherit;
+  }
+
 }
