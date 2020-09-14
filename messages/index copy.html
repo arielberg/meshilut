@@ -10,15 +10,46 @@
         <link rel="stylesheet" type="text/css" href="/assets/css/font-awesome.all.min.css" media="all">       
         <link rel="stylesheet" id="google-fonts-1-css" href="https://fonts.googleapis.com/css?family=Varela+Round%3A100%2C100italic%2C200%2C200italic%2C300%2C300italic%2C400%2C400italic%2C500%2C500italic%2C600%2C600italic%2C700%2C700italic%2C800%2C800italic%2C900%2C900italic%7CHeebo%3A100%2C100italic%2C200%2C200italic%2C300%2C300italic%2C400%2C400italic%2C500%2C500italic%2C600%2C600italic%2C700%2C700italic%2C800%2C800italic%2C900%2C900italic%7CAmatic+SC%3A100%2C100italic%2C200%2C200italic%2C300%2C300italic%2C400%2C400italic%2C500%2C500italic%2C600%2C600italic%2C700%2C700italic%2C800%2C800italic%2C900%2C900italic%7CPT+Sans%3A100%2C100italic%2C200%2C200italic%2C300%2C300italic%2C400%2C400italic%2C500%2C500italic%2C600%2C600italic%2C700%2C700italic%2C800%2C800italic%2C900%2C900italic%7CRoboto%3A100%2C100italic%2C200%2C200italic%2C300%2C300italic%2C400%2C400italic%2C500%2C500italic%2C600%2C600italic%2C700%2C700italic%2C800%2C800italic%2C900%2C900italic%7CMontserrat%3A100%2C100italic%2C200%2C200italic%2C300%2C300italic%2C400%2C400italic%2C500%2C500italic%2C600%2C600italic%2C700%2C700italic%2C800%2C800italic%2C900%2C900italic&amp;subset=hebrew&amp;ver=5.3" type="text/css" media="all">        
         <link rel="icon" href="/assets/images/favicon.ico" sizes="16x16">
-        
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
-        <title>The Movement for Governance and Democracy - undefined</title>
+        <title>התנועה למשילות ודמוקרטיה - הודעות התנועה</title>
         <title>The Rock (1996)</title>
-        <meta property="og:title" content="The Movement for Governance and Democracy - undefined" />
-        <meta property="og:description" content="" />
+        <meta property="og:title" content="התנועה למשילות ודמוקרטיה - הודעות התנועה" />
+        <meta property="og:description" content="undefined" />
         <meta property="og:image" content="http://meshilut.org/assets/images/logo.png" />
+        <style>
+            .main {
+            overflow-y: hidden;
+            max-height: calc(100vh - 4em);
+            width: 10vw;
+            margin: auto;
+            }
+            
+            .result-card {
+                margin-bottom: 1em;
+                overflow: hidden;
+                height: 4em;
+                color: #fff;
+                font-size: 2em;
+                text-align: center;
+                vertical-align: middle;
+                line-height: 4em;
+            }
+            
+            .result-card.sliding-now {
+            animation: up 2s linear infinite forwards;
+            animation-delay: 3s;
+            }
+            
+            @keyframes up {
+            from {
+                transform: translateY(0);
+            }
+            to {
+                transform: translateY(calc(-4em - 1em));
+            }
+            }
+        </style>
     </head>
-<body class="itemPage post post189">
+<body class="messages">
     <header id="head">
         <div class="inner">
             <div id="logo">
@@ -27,10 +58,9 @@
                 </a>
             </div>
             <nav class="collapse navbar-collapse" id="mainMenu">
-                <ul class='navbar-nav'><li><a href="/en/about">About Us</a></li>
-<li><a href="/en/posts">Posts</a></li>
-<li><a href="/">עברית</a></li>
-</ul>
+                <ul class='navbar-nav'>
+                                <li><a href="/about">מי אנחנו?</a></li><li><a href="/in-the-news">התנועה בחדשות</a></li><li><a href="/position-papers">ניירות עמדה ומחקרים</a></li><li><a href="/posts">מאמרים</a></li><li><a href="/media">וידיאו</a></li><li><a href="/contact-us">צור קשר</a></li><li><a href="/join-us">להצטרפות</a></li><li><a href="/donations">לתרומה</a></li><li><a href="/en">English</a></li>
+                                </ul>
             </nav>
             <div class="search-form">
                 <form action="">
@@ -43,9 +73,52 @@
     </header>
     <main id="main">        
         <section class='title'>
-            <h1>undefined</h1>        
+            <h1>הודעות התנועה</h1>        
         </section>
+        <script>
+    let basePath = location.origin ;
+    fetch( basePath + '/search/messages.json')
+        .then(res=> res.json() )
+        .then(res=>res.reverse())
+        .then( res => {
+            res.forEach( jsonItem=>{
+                console.log(jsonItem);
+                let itemDiv = document.createElement('div');
+                itemDiv.className = "result-card";
+                let itemContent = document.createElement('div');
+                let itemTitle = document.createElement('h3');
+                itemTitle.onclick = e => { window.location = itemURL }
+                itemTitle.innerText = jsonItem.title;
+                itemContent.append(itemTitle);
+                let itemTeaser = document.createElement('span');
+                itemTeaser.innerText = jsonItem.body;
+                itemContent.append(itemTeaser);
+                itemDiv.append(itemContent);
+                document.getElementById('main').appendChild(itemDiv);
+            })
+        });
+    
         
+        (function() {
+            // var t0 = performance.now();
+            setInterval(function() {
+              var parent = document.querySelector('.main');
+              var slide = parent.querySelectorAll('.result-card');
+          
+              for (var i = 0; i < slide.length; i++) {
+                var x = slide[i];
+                x.classList.toggle('sliding-now');
+              }
+          
+              setTimeout(function() {
+                parent.appendChild(slide[0]);
+              }, 5000);
+          
+            }, 5000);
+            // var t1 = performance.now();
+            // console.log("Carousel taking " + (t1 - t0) + " milliseconds.");
+          })()
+</script>
     </main>
     <script>
         // fix for github pages:

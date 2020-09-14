@@ -6,10 +6,13 @@
     ],
     "he":[
         { "url":"about", "label":"מי אנחנו?"},
-        { "url":"in-the-news", "label":"התנועה בחדשות"},
+        { "url":"messages", "label":"הודעות התנועה"},
         { "url":"position-papers", "label":"ניירות עמדה ומחקרים"},
-        { "url":"posts", "label":"מאמרים"},
-        { "url":"media", "label":"וידיאו"},
+        { "label":"בתקשורת", "subItems":[
+            { "url":"posts", "label":"מאמרים"},
+            { "url":"media", "label":"וידיאו"},
+            { "url":"in-the-news", "label":"התנועה בחדשות"}
+        ]},
         { "url":"contact-us", "label":"צור קשר"},
         { "url":"join-us", "label":"להצטרפות"},
         { "url":"donations", "label":"לתרומה"},

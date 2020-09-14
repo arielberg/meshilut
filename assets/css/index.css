@@ -230,7 +230,8 @@
     opacity: 1;
 }
 
-#main section.more-aboutus .social-icons-wrapper a {
+#main section.more-aboutus .social-icons-wrapper a,
+#main section.more-aboutus .social-icons-wrapper a:hover {
     height: 50px;
     width: 50px;
     display: flex;
@@ -239,6 +240,8 @@
     border-radius: 10%;
     margin: 3px;
     color: #fff;
+    z-index:1;
+    text-decoration:none;
 }
 
 #main section.more-aboutus .social-icons-wrapper a:nth-child(1) {

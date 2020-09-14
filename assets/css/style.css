@@ -130,7 +130,7 @@
   direction:rtl;
   display:block;
   font-size:15px;
-  height:50px;
+  height:100px;
   hyphens:manual;
   line-height:normal;
   list-style-image:none;
@@ -181,6 +181,21 @@
  /* border-top: 4px solid #ffffff;*/
   border-bottom: 2px solid #ffffff;
   padding-bottom: 35px;
+}
+
+#head nav li:hover .dropdown-menu {
+  display:block;
+  background-color: #4C6CA2ee;
+  top: 88px;
+  margin-left: -36px;
+}
+
+#head nav li .dropdown-menu a {
+  text-align:center;
+}
+
+#head nav li:hover .dropdown-menu a:last-child {
+  border-bottom: 0 none;
 }
 
 .shape-fill {
@@ -590,19 +605,35 @@ body.AboutUs #members {
 
   #head nav li {
     width: 100%;
+    height:auto;
     background: rgba(40,120,160,0.96);
     border-bottom: 1px solid #fff;
   }
 
   #head nav a {
     padding: 0 36px 20px;
-    border-bottom: 1px solid #666;
     font-weight:bold;
   }
 
   #head nav li:hover a {
     border-bottom: 1px solid #666;
     padding-bottom: 20px;
+  }
+
+  #head nav li .dropdown-menu , 
+  #head nav li:hover .dropdown-menu {
+    position: initial;
+    display: block;
+    background-color: transparent;
+    width: 100vw;
+    margin: 0;
+    padding: 0;
+    border: 0 none;
+  }
+  
+  #head nav li .dropdown-menu a {
+    padding: 0 100px;
+    border-bottom: 0 none;
   }
 
   #logo {

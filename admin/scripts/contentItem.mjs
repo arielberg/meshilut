@@ -178,12 +178,7 @@ export function contentItem ( contentType , ItemId ) {
                                 .then( jsonMenu => {
                 return Promise.all( languages.map( language => {
 
-                  let menuHtml = '';
-                  if( jsonMenu[language] ) {
-                    menuHtml = `<ul class='navbar-nav'>
-                      ${ jsonMenu[language].map(i=>`<li><a href="/${ i.url }">${ i.label }</a></li>`).join('') }
-                    </ul>`;
-                  }
+                  let menuHtml  = renderMenu( jsonMenu[language] );
 
                   let strings = {};        
                   translations.forEach(item => strings[item.key] = item.t[language] );
@@ -269,6 +264,33 @@ export async function contentItemLoader ( contentType , ItemId ) {
   }
 }
 
+/**
+   * Render HTML menu from JSON
+   */
+  export function renderMenu( jsonMenu ) {
+    let menuHtml = '';
+    if( jsonMenu ) {
+      menuHtml = `<ul class='navbar-nav'>`;
+      jsonMenu.forEach( menuItem => {
+          if ( menuItem.subItems ) { 
+            menuHtml += `<li class='nav-item dropdown'>
+              <a>${ menuItem.label }</a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                  ${ menuItem.subItems
+                      .map( menuSubItem=>`<a class="dropdown-item"  href="/${ menuSubItem.url }">${ menuSubItem.label }</a>`)
+                      .join('') }
+              </div>
+            </li>\n`;
+          }
+          else { 
+            menuHtml += `<li><a href="/${ menuItem.url }">${ menuItem.label }</a></li>\n`;
+          }
+      });
+      
+      menuHtml += `</ul>`;
+    }
+    return menuHtml;
+  }
 
 /**
  * 
