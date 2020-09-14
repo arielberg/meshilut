@@ -276,3 +276,8 @@ h1 {
   max-width: 500px;
   background-color: #ccc;
 }
+
+.se-menu-list button.se-btn-list a {
+  padding: 10px 12px !important;
+  font-size: 12px !important;
+}
