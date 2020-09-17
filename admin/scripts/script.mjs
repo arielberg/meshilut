@@ -89,7 +89,8 @@ export function routeToCall(){
           var suneditor = SUNEDITOR.create( wysiwyg.id , {
             buttonList: [
                 ['undo', 'redo'],
-                ['align', 'horizontalRule', 'list', 'table', 'fontSize']
+                ['align', 'horizontalRule', 'list', 'table', 'fontSize'],
+                ["link", "image", "video", "audio"]
             ],
           });
           suneditor.onChange =  wysiwyg.onchange;
