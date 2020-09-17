@@ -80,7 +80,7 @@
                 itemTitle.innerText = jsonItem.title;
                 itemContent.append(itemTitle);
                 let itemTeaser = document.createElement('span');
-                itemTeaser.innerText = jsonItem.body;
+                itemTeaser.innerHTML = jsonItem.body;
                 itemContent.append(itemTeaser);
                 itemDiv.append(itemContent);
                 document.getElementById('main').appendChild(itemDiv);
