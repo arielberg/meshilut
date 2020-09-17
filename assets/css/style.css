@@ -602,6 +602,24 @@ body.AboutUs #members {
     padding: 0 30px;
   }
 }
+@media only screen and  (min-width: 950px){ 
+  #head nav a[href="/join-us"] {
+    border: 1px solid #174282;
+    background: #fff;
+    color: #174282;
+    margin-top: 9px;
+    padding-top: 20px;
+    border-radius: 10px;
+    background: rgb(2,0,36);
+    background: linear-gradient(90deg, rgba(200,200,255,1) 0%, rgba(255,255,255,1) 100%);
+    font-weight: 900;
+    font-size: 110%;
+  }
+  #head nav li:hover a[href="/join-us"]  {
+    padding-bottom: 17px;
+    border-bottom: 0 none;
+  }
+}
 
 @media only screen and  (max-width: 950px){ 
 
