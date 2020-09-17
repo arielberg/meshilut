@@ -604,14 +604,13 @@ body.AboutUs #members {
 }
 @media only screen and  (min-width: 950px){ 
   #head nav a[href="/join-us"] {
-    border: 1px solid #174282;
+    border: 2px solid #174282;
     background: #fff;
     color: #174282;
     margin-top: 9px;
     padding-top: 20px;
     border-radius: 10px;
-    background: rgb(2,0,36);
-    background: linear-gradient(45deg, rgba(200,255,255,1) 0%, rgba(255,255,255,1) 30%);
+    background: #fff;
     font-weight: 900;
     font-size: 110%;
   }
