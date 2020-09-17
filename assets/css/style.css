@@ -185,9 +185,12 @@
 
 #head nav li:hover .dropdown-menu {
   display:block;
-  background-color: #4C6CA2ee;
+  background-color: #0021a1dd;
   top: 88px;
   margin-left: -36px;
+  animation-name: openSubMenu;
+  animation-duration: 0.5s;
+  animation-timing-function: ease-out;
 }
 
 #head nav li .dropdown-menu a {
@@ -196,6 +199,18 @@
 
 #head nav li:hover .dropdown-menu a:last-child {
   border-bottom: 0 none;
+}
+
+/* The animation code */
+@keyframes openSubMenu {
+  from {    
+    opacity: 0;
+    top: 70px;
+  }
+  to {    
+    opacity: 1;
+    top: 88px;
+  }
 }
 
 .shape-fill {
