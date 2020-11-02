@@ -68,7 +68,7 @@
     fetch( basePath + '/search/papers.json')
         .then(res=>res.json())
         .then(jsonItems=>{
-            jsonItems.forEach( jsonItem => {
+            jsonItems.reverse().forEach( jsonItem => {
                 let itemDiv = document.createElement('div');
                 itemDiv.className = "result-card";
                 let itemTitle = document.createElement('h3');
