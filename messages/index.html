@@ -70,7 +70,6 @@
         .then(res=>res.reverse())
         .then( res => {
             res.forEach( jsonItem=>{
-                console.log(jsonItem);
                 let itemDiv = document.createElement('div');
                 itemDiv.className = "result-card";
                 let itemContent = document.createElement('div');
@@ -79,10 +78,14 @@
                 itemTitle.innerText = jsonItem.title;
                 itemContent.append(itemTitle);
                 let itemTeaser = document.createElement('span');
-                itemTeaser.innerHTML = jsonItem.body;
                 itemContent.append(itemTeaser);
                 itemDiv.append(itemContent);
                 document.getElementById('main').appendChild(itemDiv);
+                fetch('/'+jsonItem.href + '/index.json')
+                    .then(r=>r.json())
+                    .then(fullMessage=>{
+                        itemTeaser.innerHTML = fullMessage.body;
+                    });
             })
         });
 </script>
