@@ -444,7 +444,7 @@ section.quote .author {
     display: inline;
 }
 
-@media only screen and  (max-width: 950px) { 
+@media only screen and  (max-width: 850px) { 
     #main section.motives img, 
     #main section.motives img:nth-child(2) {
         max-width: 100%;

@@ -572,7 +572,7 @@ body.donations #main::before  {
 }
 
 body.AboutUs #members {
-    width: 560px;
+    max-width: 560px;
     margin: 0 auto;
 }
 .newsGrid {
@@ -700,4 +700,7 @@ body.AboutUs #members {
     display: inherit;
   }
 
+  .team .member {
+    width:auto;
+  }
 }
