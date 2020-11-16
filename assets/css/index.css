@@ -187,7 +187,7 @@
 }
 
 #main section.motives .col1 {
-    width: 500px;
+    max-width: 500px;
     margin-left: 20px;
     display: inline-block;;
 }
@@ -442,4 +442,11 @@ section.quote .author {
     z-index: 2;
     font-size: 37px;
     display: inline;
+}
+
+@media only screen and  (max-width: 950px) { 
+    #main section.motives img {
+        max-width: 100%;
+        width: 100%;
+    }
 }
