@@ -231,6 +231,7 @@
     text-align: center;
     color: #fff;
     font-size: 65px;
+    margin-top: 133px;
     font-weight: 400;
 }
 #main section.more-aboutus .shape-bottom {
@@ -296,7 +297,7 @@
 #main section ._shape-bottom {
     fill: #fff;
     overflow: hidden;
-    margin-top: -440px;
+    margin-top: -270px;
 }
 
 #main section ._shape-bottom svg{
