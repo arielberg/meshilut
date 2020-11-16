@@ -445,9 +445,15 @@ section.quote .author {
 }
 
 @media only screen and  (max-width: 950px) { 
-    #main section.motives img {
+    #main section.motives img, 
+    #main section.motives img:nth-child(2) {
         max-width: 100%;
         width: 100%;
         margin: 0;
+    }
+
+    #main section.summary-section .video {
+        width: 90vw;
+        height: 50vw;
     }
 }
