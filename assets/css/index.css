@@ -448,5 +448,6 @@ section.quote .author {
     #main section.motives img {
         max-width: 100%;
         width: 100%;
+        margin: 0;
     }
 }
