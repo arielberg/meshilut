@@ -3,25 +3,33 @@
 
         var proxyUrl = 'https://cors-anywhere.herokuapp.com/',
         targetUrl = 'https://www.youtube.com/feeds/videos.xml?channel_id=UCTYbGS4HxgYi2diMjfmmrFA'
+        let container = document.getElementById('items');
+
         fetch(proxyUrl + targetUrl)
                 .then(blob => blob.text())
                 .then(str => new window.DOMParser().parseFromString(str, "text/xml"))
                 .then(feed=> {
                         const items = feed.querySelectorAll("entry");
-                        let html = ``;
                         items.forEach(el => {
                                 let thumbnail = el.getElementsByTagName('media:group')[0].getElementsByTagName('media:thumbnail')[0].getAttribute('url');
                                 let id = el.getElementsByTagName('id')[0].innerHTML.split(':')[2];
-                                html += `
-                                <div class="result-card">
-                                <img src="${thumbnail}" alt="">
-                                <h2>
-                                        <a href="https://www.youtube.com/watch?v=${id}">
-                                        ${el.querySelector("title").innerHTML}
-                                        </a>
-                                </h2>
-                                </div>`});               
-                        document.getElementById('items').innerHTML = html;
+                                let card = document.createElement('div');
+                                card.className = 'result-card';
+                                let image = document.createElement('img');
+                                card.appendChild(image);
+                                console.log(thumbnail)
+                                image.src = thumbnail;
+                                let title = document.createElement('h2');
+                                card.appendChild(title);
+                                let titleLink = document.createElement('a');
+                                title.appendChild(titleLink);
+                                titleLink.innerText = el.querySelector("title").innerHTML;
+                                titleLink.href = "https://www.youtube.com/watch?v="+id;
+                                container.appendChild( card ); 
+                        
+                        });  
+                                             
+                       
         })
         .catch(e => {
                 console.log(e);

@@ -63,9 +63,44 @@
         <section class='title'>
             <h1>מדיה</h1>        
         </section>
-        <iframe width="560" height="315" 
-        src="https://www.youtube.com/embed/videoseries?list=UCCv73b_OI0ouOvgKPmAsVVA" 
-        frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+        <div id='items' ></div>
+<script>
+
+        var proxyUrl = 'https://cors-anywhere.herokuapp.com/',
+        targetUrl = 'https://www.youtube.com/feeds/videos.xml?channel_id=UCTYbGS4HxgYi2diMjfmmrFA'
+        let container = document.getElementById('items');
+
+        fetch(proxyUrl + targetUrl)
+                .then(blob => blob.text())
+                .then(str => new window.DOMParser().parseFromString(str, "text/xml"))
+                .then(feed=> {
+                        const items = feed.querySelectorAll("entry");
+                        items.forEach(el => {
+                                let thumbnail = el.getElementsByTagName('media:group')[0].getElementsByTagName('media:thumbnail')[0].getAttribute('url');
+                                let id = el.getElementsByTagName('id')[0].innerHTML.split(':')[2];
+                                let card = document.createElement('div');
+                                card.className = 'result-card';
+                                let image = document.createElement('img');
+                                card.appendChild(image);
+                                console.log(thumbnail)
+                                image.src = thumbnail;
+                                let title = document.createElement('h2');
+                                card.appendChild(title);
+                                let titleLink = document.createElement('a');
+                                title.appendChild(titleLink);
+                                titleLink.innerText = el.querySelector("title").innerHTML;
+                                titleLink.href = "https://www.youtube.com/watch?v="+id;
+                                container.appendChild( card ); 
+                        
+                        });  
+                                             
+                       
+        })
+        .catch(e => {
+                console.log(e);
+                return e;
+        });
+</script>
     </main>
     <script>
         // fix for github pages:
