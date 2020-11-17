@@ -13,10 +13,10 @@
                                 let thumbnail = el.getElementsByTagName('media:group')[0].getElementsByTagName('media:thumbnail')[0].getAttribute('url');
                                 let id = el.getElementsByTagName('id')[0].innerHTML.split(':')[2];
                                 html += `
-                                <div class='result-card'>
+                                <div class="result-card">
                                 <img src="${thumbnail}" alt="">
                                 <h2>
-                                        <a href='https://www.youtube.com/watch?v=${id}'>
+                                        <a href="https://www.youtube.com/watch?v=${id}">
                                         ${el.querySelector("title").innerHTML}
                                         </a>
                                 </h2>
