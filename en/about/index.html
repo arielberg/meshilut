@@ -61,7 +61,9 @@
         fetch( basePath + '/search/member.json')
         .then(r=>r.json())
         .then(members=>{ 
-            members.forEach( memberData => {
+            members
+            .reverse()
+            .forEach( memberData => {
                 let member = document.createElement('article');
                 member.className = "member";
                 
