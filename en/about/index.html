@@ -75,7 +75,7 @@
 
                 let body = document.createElement('div');
                 body.className = 'caption';
-                body.innerText = memberData.body ? memberData.body : memberData.about;
+                body.innerHTML = memberData.about;
                 member.appendChild(body);
 
                 document.getElementById('members').appendChild(member);

@@ -653,9 +653,7 @@ export function contentItemForm ( contentType , editedItem , op ) {
    * Get Search string - map item words in order to support static search
    */
   let getCleanText = function(value) {
-      return value.replace(/(<([^>]+)>)/ig," ")
-                  .replace(/\r?\n|\r/g,' ')
-                  .replace(/[^a-zA-Z0-9א-ת ]/g,"")
+      return value;
   }
 
   return wrapper;
