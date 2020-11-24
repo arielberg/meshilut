@@ -6,6 +6,7 @@
         "labelDefinedPlural":"הכתבות",
         "urlPrefix":"post/",
         "fields":[
+            {"name":"date","label":"תאריך פרסום","type":"date", "i18n":false},
             {"name":"image","label":"תמונה","type":"image", "i18n":false},
             {"name":"body","label":"תוכן","type":"wysiwyg", "placeholder":"גוף הפוסט"}
         ]
@@ -40,6 +41,7 @@
         "labelPlural":"ניירות עמדה",
         "labelDefinedPlural":"ניירות העמדה",
         "fields":[
+            {"name":"date","label":"תאריך פרסום","type":"date", "i18n":false},
             {"name":"body","label":"תקציר","type":"wysiwyg", "placeholder":"גוף הפוסט"},
             {"name":"paper","label":"מסמך","type":"file", "i18n": false}
         ]
@@ -51,6 +53,7 @@
         "labelPlural":"הודעות תנועה",
         "labelDefinedPlural":"הודעות התנועה",
         "fields":[
+            {"name":"date","label":"תאריך פרסום","type":"date", "i18n":false},
             {"name":"body","label":"הודעה","type":"wysiwyg", "placeholder":"גוף הודעה"}
         ]
     }

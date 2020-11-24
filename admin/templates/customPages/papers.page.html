@@ -3,21 +3,33 @@
     fetch( basePath + '/search/papers.json')
         .then(res=>res.json())
         .then(jsonItems=>{
-            jsonItems.reverse().forEach( jsonItem => {
-                let itemDiv = document.createElement('div');
-                itemDiv.className = "result-card";
-                let itemTitle = document.createElement('h3');
-                itemTitle.innerText = jsonItem.title;
-                itemDiv.append(itemTitle);
-                let itemTeaser = document.createElement('span');
-                itemTeaser.innerText = jsonItem.body;
-                itemDiv.append(itemTeaser);
-                let paperLink = document.createElement('a');
-                paperLink.className = 'readMore paperLink';
-                paperLink.href = '/'+jsonItem.paper;
-                paperLink.innerText = 'לקריאה';
-                itemDiv.append(paperLink);
-                document.getElementById('main').appendChild(itemDiv);
-            });                
+            jsonItems
+                .forEach( jsonItem => { 
+                    if ( null == jsonItem.date ) { 
+                        jsonItem.dt = 0;
+                    }
+                    else {
+                        jsonItem.dt = Date.parse(jsonItem.date );
+                    }
+                });
+            jsonItems
+                .sort((a,b)=>{ return a.dt - b.dt })
+                .reverse()
+                .forEach( jsonItem => {
+                    let itemDiv = document.createElement('div');
+                    itemDiv.className = "result-card";
+                    let itemTitle = document.createElement('h3');
+                    itemTitle.innerText = jsonItem.title;
+                    itemDiv.append(itemTitle);
+                    let itemTeaser = document.createElement('span');
+                    itemTeaser.innerText = jsonItem.body;
+                    itemDiv.append(itemTeaser);
+                    let paperLink = document.createElement('a');
+                    paperLink.className = 'readMore paperLink';
+                    paperLink.href = '/'+jsonItem.paper;
+                    paperLink.innerText = 'לקריאה';
+                    itemDiv.append(paperLink);
+                    document.getElementById('main').appendChild(itemDiv);
+                });                
         });        
 </script> 

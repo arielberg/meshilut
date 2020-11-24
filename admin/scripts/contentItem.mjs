@@ -94,7 +94,8 @@ export function contentItem ( contentType , ItemId ) {
   }
 
   this.getURL = returnAbsolutePath => {
-      return (returnAbsolutePath ? '/' : '') + typeData.urlPrefix + this.id;
+      let url = (returnAbsolutePath ? '/' : '') + typeData.urlPrefix + this.id;
+      return decodeURIComponent(url);
   }
 
   this.setFile = ( field, value ) => {
@@ -439,15 +440,15 @@ export function contentItemForm ( contentType , editedItem , op ) {
             break;
             case 'image':  
             case 'file':
-              if( field.type == 'image') {  
-                // console.log(siteUrl);       
+              let filePath = decodeURIComponent(editedItem[field.name]);       
+              if( field.type == 'image') {                  
                 fieldDiv.innerHTML += `<div class='preview'>
-                  ${ editedItem[field.name]? `<img src="${ '../' + editedItem[field.name]+'?t'+ ((new Date()).getTime()) }" />` : '' }
+                  ${ filePath ? `<img src="${ '../' + filePath +'?t'+ ((new Date()).getTime()) }" />` : '' }
                 </div>`;
               }
               else {
                 fieldDiv.innerHTML += `<div class='preview'>
-                  ${ editedItem[field.name] }
+                  ${ filePath }
                 </div>`;
               }
             
@@ -702,7 +703,7 @@ export function contentList( parentElement, contentType ) {
                       </tr>
                       ${ items.reverse().map((item) => 
                         `<tr>
-                          <td>${item.id}</td>
+                          <td>${ decodeURIComponent(item.id) }</td>
                           
                           <td>${item.title}</td>
                           <td>                            
