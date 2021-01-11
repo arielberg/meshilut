@@ -96,7 +96,7 @@
                     itemTitle.innerText = jsonItem.title;
                     itemContent.append(itemTitle);
                     let itemTeaser = document.createElement('span');
-                    itemTeaser.innerText = jsonItem.body.substring(0, 250);
+                    itemTeaser.innerText = jsonItem.body.replace(/<[^>]+>/g, '').substring(0, 250);
                     itemContent.append(itemTeaser);
                     let link = document.createElement('a');
                     link.href = itemURL;
