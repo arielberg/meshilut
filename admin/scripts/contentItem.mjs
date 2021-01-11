@@ -206,7 +206,7 @@ export function contentItem ( contentType , ItemId ) {
                   
                   return {
                     "content":  new Function("return `" + baseTemplate + "`;").call(templateVars),
-                    "filePath": ( language == appSettings.Default_Language?'':language+'/')+editItemObj.getURL(false)+'/index.html',
+                    "filePath": ( isDefaultLanguage ? '': language+'/' )+editItemObj.getURL(false)+'/index.html',
                     "encoding": "utf-8" 
                   }
                 }));
