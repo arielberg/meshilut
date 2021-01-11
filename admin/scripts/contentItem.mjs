@@ -183,7 +183,7 @@ export function contentItem ( contentType , ItemId ) {
 
                   let strings = {};        
                   translations.forEach(item => strings[item.key] = item.t[language] );
-                  let isDefaultLanguage = language == appSettings.Default_Language;
+                  let isDefaultLanguage = (language == '') || (language == appSettings.Default_Language);
                   let pageDescription = editItemObj.seo.description ? editItemObj.seo.description : strings.SEODefaultDescription;
                   
                   let templateVars = {
