@@ -70,7 +70,6 @@ h1 {
   
   #sidebar {
       width: var(--sidebar-width);
-      position: fixed;
       top: 0;
       right: 0;
       height: 100vh;
@@ -79,6 +78,7 @@ h1 {
       color: #fff;
       transition: all 0.3s;
       padding-top: 20px;
+      height:100%;
   }
    
   .hideLeftBar {
@@ -127,7 +127,7 @@ h1 {
 
   #mainArea {
     padding-top: 20px;
-    margin-right: 290px;
+    margin-right: 20px;
     width: calc( 100% - 350px );
   }
 
