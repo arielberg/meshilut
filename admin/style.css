@@ -66,15 +66,14 @@ h1 {
   .wrapper {
       display: flex;
       width: 100%;
+      background-image: linear-gradient(to left, var(--sidebar-color) var(--sidebar-width), #fff 0px);
   }
   
   #sidebar {
       width: var(--sidebar-width);
       top: 0;
       right: 0;
-      height: 100vh;
       z-index: 999;
-      background: var(--sidebar-color);
       color: #fff;
       transition: all 0.3s;
       padding-top: 20px;
