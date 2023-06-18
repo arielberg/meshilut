@@ -65,12 +65,11 @@
 </section>
 <script>
     let basePath = location.origin ;
-    fetch( basePath + '/search/messages.json')
+    fetch( basePath + '/search/upcomingEvents.json')
         .then(res=>res.json())
         .then(res=>res.reverse())
         .then( res => {
-            res
-            .forEach( jsonItem => { 
+            res.forEach( jsonItem => { 
                 if ( null == jsonItem.date ) { 
                     jsonItem.dt = 0;
                 }
