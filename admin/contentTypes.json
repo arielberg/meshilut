@@ -56,5 +56,17 @@
             {"name":"date","label":"תאריך פרסום","type":"date", "i18n":false},
             {"name":"body","label":"הודעה","type":"wysiwyg", "placeholder":"גוף הודעה"}
         ]
+    },
+    {  
+        "name":"upcomingEvents",
+        "label":"אירוע",
+        "urlPrefix":"upcoming-events/",
+        "labelPlural":"אירועים",
+        "labelDefinedPlural":"אירועים",
+        "fields":[
+            {"name":"date","label":"תאריך","type":"date", "i18n":false},
+            {"name":"body","label":"תיאור","type":"wysiwyg", "placeholder":"גוף הודעה"},
+            {"name":"image","label":"תמונה","type":"image", "i18n":false}
+        ]
     }
 ]

@@ -52,6 +52,7 @@ body.AboutUs  {
     max-width: 100%;
     border-radius: 100px;
     width: 150px;
+    height: 150px;
     margin: 0 auto;
     display: block;
 }

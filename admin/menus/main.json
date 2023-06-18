@@ -14,6 +14,7 @@
             { "url":"in-the-news", "label":"התנועה בחדשות"}
         ]},
         { "url":"contact-us", "label":"צור קשר"},
+        { "url":"upcoming-events", "label":"אירועים קרובים"},
         { "url":"join-us", "label":"להצטרפות"},
         { "url":"donations", "label":"לתרומה"},
         { "url":"en", "label":"English"}
