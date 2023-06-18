@@ -64,10 +64,13 @@
 <h1>מי אנחנו</h1>
 </section>
 <section class='team'>
+    <h3>המייסדים</h3>        
+    <div id='founders'></div>
     <h3>הצוות שלנו</h3>        
     <div id='members'></div>
     <script>
         let basePath = location.origin ;
+        
         fetch( basePath + '/search/member.json')
         .then(r=>r.json())
         .then(members=>{ 
@@ -89,8 +92,12 @@
                 body.className = 'caption';
                 body.innerHTML = memberData.about;
                 member.appendChild(body);
-
-                document.getElementById('members').appendChild(member);
+                if (  ['yehuda','simcha'].includes(memberData.id) ) {
+                    document.getElementById('founders').appendChild(member);
+                }
+                else {
+                    document.getElementById('members').appendChild(member);
+                }
             });
         });       
     </script>

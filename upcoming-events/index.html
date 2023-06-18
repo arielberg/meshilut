@@ -10,9 +10,9 @@
 <link rel="stylesheet" type="text/css" href="/assets/css/font-awesome.all.min.css" media="all">
 <link rel="stylesheet" id="google-fonts-1-css" href="https://fonts.googleapis.com/css?family=Varela+Round%3A100%2C100italic%2C200%2C200italic%2C300%2C300italic%2C400%2C400italic%2C500%2C500italic%2C600%2C600italic%2C700%2C700italic%2C800%2C800italic%2C900%2C900italic%7CHeebo%3A100%2C100italic%2C200%2C200italic%2C300%2C300italic%2C400%2C400italic%2C500%2C500italic%2C600%2C600italic%2C700%2C700italic%2C800%2C800italic%2C900%2C900italic%7CAmatic+SC%3A100%2C100italic%2C200%2C200italic%2C300%2C300italic%2C400%2C400italic%2C500%2C500italic%2C600%2C600italic%2C700%2C700italic%2C800%2C800italic%2C900%2C900italic%7CPT+Sans%3A100%2C100italic%2C200%2C200italic%2C300%2C300italic%2C400%2C400italic%2C500%2C500italic%2C600%2C600italic%2C700%2C700italic%2C800%2C800italic%2C900%2C900italic%7CRoboto%3A100%2C100italic%2C200%2C200italic%2C300%2C300italic%2C400%2C400italic%2C500%2C500italic%2C600%2C600italic%2C700%2C700italic%2C800%2C800italic%2C900%2C900italic%7CMontserrat%3A100%2C100italic%2C200%2C200italic%2C300%2C300italic%2C400%2C400italic%2C500%2C500italic%2C600%2C600italic%2C700%2C700italic%2C800%2C800italic%2C900%2C900italic&amp;subset=hebrew&amp;ver=5.3" type="text/css" media="all">
 <link rel="icon" href="/assets/images/favicon.ico" sizes="16x16">
-<title>התנועה למשילות ודמוקרטיה - צור קשר</title>
+<title>התנועה למשילות ודמוקרטיה - אירועים קרובים</title>
 <title>The Rock (1996)</title>
-<meta property="og:title" content="התנועה למשילות ודמוקרטיה - צור קשר" />
+<meta property="og:title" content="התנועה למשילות ודמוקרטיה - אירועים קרובים" />
 <meta property="og:description" content="undefined" />
 <meta property="og:image" content="http://meshilut.org/assets/images/logo.png" />
 
@@ -25,7 +25,7 @@
             gtag('config', 'G-71Y9BT6T9G');
         </script>
 </head>
-<body class="contact">
+<body class="events">
 <header id="head">
 <div class="inner">
 <div id="logo">
@@ -61,33 +61,45 @@
 </header>
 <main id="main">
 <section class="title">
-<h1>צור קשר</h1>
+<h1>אירועים קרובים</h1>
 </section>
-<section class="three-widgets">
-    <article class="widget" style="cursor:pointer" onclick="window.location.href = 'https://www.waze.com/ul?ll=31.78372440%2C35.19458310&navigate=yes'">
-        <i class="fa fa-map-marker" aria-hidden="true"></i>
-        <h3>בקרו אצלנו</h3>
-        <div>רח' הברון הירש 4 ירושלים</div>
-    </article>
-    <article class="widget">
-        <i class="fa fa-phone" aria-hidden="true"></i>
-        <h3>התקשרו</h3>
-        <div>
-            (+972)<br/>
-            02-5714118
-        </div>
-    </article>
-    <article class="widget" style="cursor:pointer" onclick='window.location.href = "mailto:office@meshilut.org"' >
-        <i class="fa fa-envelope" aria-hidden="true"></i>
-        <h3>שלחו לנו אמייל</h3>
-        <div>office@meshilut.org</div> 
-    </article>
-    <article class="widget" style="cursor:pointer" onclick='window.location.href = "https://www.jgive.com/new/he/ils/charity-organizations/648"'>
-        <i class="fa fa-money" aria-hidden="true"></i>
-        <h3>תרמו לנו</h3>
-        <div>לתרומה לחצו כאן</div>
-    </article>
-</section>   
+<script>
+    let basePath = location.origin ;
+    fetch( basePath + '/search/messages.json')
+        .then(res=>res.json())
+        .then(res=>res.reverse())
+        .then( res => {
+            res
+            .forEach( jsonItem => { 
+                if ( null == jsonItem.date ) { 
+                    jsonItem.dt = 0;
+                }
+                else {
+                    jsonItem.dt = Date.parse(jsonItem.date );
+                }
+            });
+            res
+                .sort((a,b)=>{ return b.dt - a.dt })
+                .forEach( jsonItem=>{
+                    let itemDiv = document.createElement('div');
+                    itemDiv.className = "result-card";
+                    let itemContent = document.createElement('div');
+                    let itemTitle = document.createElement('h3');
+                    itemTitle.onclick = e => { window.location = itemURL }
+                    itemTitle.innerText = jsonItem.title;
+                    itemContent.append(itemTitle);
+                    let itemTeaser = document.createElement('span');
+                    itemContent.append(itemTeaser);
+                    itemDiv.append(itemContent);
+                    document.getElementById('main').appendChild(itemDiv);
+                    fetch('/'+jsonItem.href + '/index.json')
+                        .then(r=>r.json())
+                        .then(fullMessage=>{
+                            itemTeaser.innerHTML = fullMessage.body;
+                        });
+            })
+        });
+</script>
 </main>
 <script>
         // fix for github pages:
