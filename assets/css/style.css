@@ -571,7 +571,8 @@ body.donations #main::before  {
   height: 100vh;
 }
 
-body.AboutUs #members {
+body.AboutUs #members,
+body.AboutUs #founders {
     max-width: 560px;
     margin: 0 auto;
 }
