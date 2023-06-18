@@ -574,8 +574,13 @@ body.donations #main::before  {
 body.AboutUs #members,
 body.AboutUs #founders {
     max-width: 560px;
-    margin: 0 auto;
+    margin: 0 auto 30px;
 }
+
+body.AboutUs .social {
+  background:#f1f1f1;
+}
+
 .newsGrid {
   display: grid;
   grid-template-columns: auto auto auto;
