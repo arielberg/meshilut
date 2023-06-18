@@ -628,6 +628,10 @@ body.media .result-card h2 {
   }
 }
 
+.frontPage .search-form {
+  display: none;
+}
+
 @media only screen and  (max-width: 1050px){ 
 
   #head .searchLink ,
