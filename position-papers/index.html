@@ -87,7 +87,8 @@
                     itemTitle.innerText = jsonItem.title;
                     itemDiv.append(itemTitle);
                     let itemTeaser = document.createElement('span');
-                    itemTeaser.innerText = jsonItem.body;
+                    itemTeaser.innerText = jsonItem.body.replace(/<[^>]+>/g, '')
+                                                        .replace('&nbsp;', ' ');
                     itemDiv.append(itemTeaser);
                     let paperLink = document.createElement('a');
                     paperLink.className = 'readMore paperLink';
