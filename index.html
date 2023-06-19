@@ -152,7 +152,7 @@ Your browser does not support HTML5 video.
                     article.style.backgroundImage = 'url('+(jsonItem.image?jsonItem.image:'/assets/images/post_default.jpeg')+')';
                     let link = document.createElement('a');
                     link.href = jsonItem.href;
-                    link.innerText = jsonItem.title;
+                    link.innerText = jsonItem.title;;
                     article.append(link);
                     container.append(article);
                 
