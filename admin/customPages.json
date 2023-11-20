@@ -19,6 +19,6 @@
         { "template":"donations.page.html", "title": "השותפות שלכם חשובה לנו", "class": "donations", "parentTempalte":"base.html", "url":"לתרומות/index.html" },
         { "template":"media.page.html", "title": "מדיה", "class": "media",  "parentTempalte":"base.html", "url":"media/index.html" },
         { "template":"search.page.html", "title": "Search Results", "class": "searchPage",  "parentTempalte":"base.html", "url":"search/index.html" },
-        { "template":"contactUs.page.html", "title": "", "class": "contactUsPage",  "parentTempalte":"base.html", "url":"contactUs/index.html" }
+        { "template":"contactUs.page.html", "title": "", "class": "contactUsPage",  "parentTempalte":"base.html", "url":"contact/index.html" }
     ]
 }
