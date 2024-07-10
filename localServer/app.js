@@ -7,9 +7,8 @@ const fs = require('fs');
 const server = http.createServer((req, res) => {
   let parts = req.url.split('/');
   parts.shift();
-  
   res.setHeader("Access-Control-Allow-Origin", "*");
-  switch(req.method) {
+  switch(parts.shift()) {
     case 'get':     
       try { 
         res.statusCode = 200;
