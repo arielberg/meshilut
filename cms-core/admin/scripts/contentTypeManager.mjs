@@ -12,13 +12,16 @@ let fieldCounter = 0;
  * Show content type management interface
  */
 export function contentTypeManager(parentElement) {
+    // Expose functions to window for onclick handlers (defined below)
+    // These will be set when the functions are defined
+    
     parentElement.innerHTML = `
         <div id="contentTypeManager" class="content-type-manager">
             <div class="manager-header">
                 <h1>Content Types</h1>
                 <p class="text-muted">Create and manage content types for your CMS. Each content type defines a structure for your content items.</p>
                 <button class="btn btn-primary btn-lg" onclick="window.showContentTypeForm()">
-                    <i class="fas fa-plus"></i> Create New Content Type
+                    + Create New Content Type
                 </button>
             </div>
             
@@ -92,10 +95,10 @@ function displayContentTypes(contentTypes) {
                 <h3>${ct.label}</h3>
                 <div class="card-actions">
                     <button class="btn btn-sm btn-primary" onclick="window.editContentType(${index})" title="Edit">
-                        <i class="fas fa-edit"></i>
+                        Edit
                     </button>
                     <button class="btn btn-sm btn-danger" onclick="window.deleteContentType(${index})" title="Delete">
-                        <i class="fas fa-trash"></i>
+                        Delete
                     </button>
                 </div>
             </div>
@@ -133,6 +136,7 @@ function displayContentTypes(contentTypes) {
  * Show form for creating/editing content type
  */
 export function showContentTypeForm(contentTypeIndex = null) {
+    window.showContentTypeForm = showContentTypeForm; // Expose to window
     const manager = document.getElementById('contentTypeManager');
     const contentTypes = window.contentTypesList || [];
     const contentType = contentTypeIndex !== null ? contentTypes[contentTypeIndex] : null;
@@ -144,7 +148,7 @@ export function showContentTypeForm(contentTypeIndex = null) {
             <div class="form-header">
                 <h2>${contentType ? 'Edit' : 'Create'} Content Type</h2>
                 <button class="btn btn-sm btn-secondary" onclick="window.cancelContentTypeForm()">
-                    <i class="fas fa-times"></i> Cancel
+                    × Cancel
                 </button>
             </div>
             
@@ -204,7 +208,7 @@ export function showContentTypeForm(contentTypeIndex = null) {
                     <div class="section-header">
                         <h3>Fields</h3>
                         <button type="button" class="btn btn-sm btn-primary" onclick="window.addField()">
-                            <i class="fas fa-plus"></i> Add Field
+                            + Add Field
                         </button>
                     </div>
                     <p class="text-muted">Define the fields that will be available for this content type.</p>
@@ -218,7 +222,7 @@ export function showContentTypeForm(contentTypeIndex = null) {
                 
                 <div class="form-actions">
                     <button type="submit" class="btn btn-primary btn-lg">
-                        <i class="fas fa-save"></i> Save Content Type
+                        ✓ Save Content Type
                     </button>
                     <button type="button" class="btn btn-secondary btn-lg" onclick="window.cancelContentTypeForm()">
                         Cancel
@@ -272,15 +276,15 @@ function renderFieldEditor(field, index) {
     return `
         <div class="field-editor" data-field-index="${index}" data-field-id="${fieldId}">
             <div class="field-header">
-                <div class="field-drag-handle">
-                    <i class="fas fa-grip-vertical"></i>
+                <div class="field-drag-handle" title="Drag to reorder">
+                    ☰
                 </div>
                 <div class="field-title">
                     <strong>${field.label || 'New Field'}</strong>
                     <span class="field-type-badge">${fieldTypes.find(t => t.value === field.type)?.label || field.type}</span>
                 </div>
                 <button type="button" class="btn btn-sm btn-danger" onclick="window.removeField('${fieldId}')">
-                    <i class="fas fa-trash"></i>
+                    × Remove
                 </button>
             </div>
             
@@ -359,7 +363,7 @@ function renderFieldEditor(field, index) {
 /**
  * Add new field
  */
-window.addField = function() {
+function addField() {
     const fieldsList = document.getElementById('fieldsList');
     const emptyMsg = fieldsList.querySelector('.empty-fields');
     if (emptyMsg) emptyMsg.remove();
@@ -379,7 +383,7 @@ window.addField = function() {
 /**
  * Remove field
  */
-window.removeField = function(fieldId) {
+function removeField(fieldId) {
     const fieldEditor = document.querySelector(`[data-field-id="${fieldId}"]`);
     if (fieldEditor) {
         fieldEditor.remove();
@@ -395,7 +399,7 @@ window.removeField = function(fieldId) {
 /**
  * Update field type
  */
-window.updateFieldType = function(fieldId) {
+function updateFieldType(fieldId) {
     const fieldEditor = document.querySelector(`[data-field-id="${fieldId}"]`);
     if (!fieldEditor) return;
     
@@ -598,14 +602,14 @@ async function saveContentType(editIndex) {
 /**
  * Edit content type
  */
-window.editContentType = function(index) {
+function editContentType(index) {
     showContentTypeForm(index);
 };
 
 /**
  * Delete content type
  */
-window.deleteContentType = async function(index) {
+async function deleteContentType(index) {
     if (!confirm('Are you sure you want to delete this content type? This action cannot be undone.')) {
         return;
     }
@@ -629,7 +633,16 @@ window.deleteContentType = async function(index) {
 /**
  * Cancel form
  */
-window.cancelContentTypeForm = function() {
+function cancelContentTypeForm() {
     const manager = document.getElementById('contentTypeManager');
     contentTypeManager(manager);
-};
+}
+
+// Expose all functions to window for onclick handlers
+window.showContentTypeForm = showContentTypeForm;
+window.addField = addField;
+window.removeField = removeField;
+window.updateFieldType = updateFieldType;
+window.editContentType = editContentType;
+window.deleteContentType = deleteContentType;
+window.cancelContentTypeForm = cancelContentTypeForm;
