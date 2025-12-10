@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>CMS Builder - Setup</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        .container {
+            text-align: center;
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+            max-width: 600px;
+        }
+        h1 {
+            margin-bottom: 20px;
+            font-size: 2.5em;
+        }
+        .spinner {
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top: 4px solid white;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .message {
+            margin-top: 20px;
+            font-size: 1.1em;
+        }
+        .link {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 12px 24px;
+            background: white;
+            color: #667eea;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: 600;
+            transition: transform 0.2s;
+        }
+        .link:hover {
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>CMS Builder</h1>
+        <div class="spinner" id="spinner"></div>
+        <div class="message" id="message">Checking configuration...</div>
+        <a href="cms-core/init/index.html" class="link" id="setupLink" style="display: none;">Go to Setup Wizard</a>
+        <a href="cms-core/admin/index.html" class="link" id="adminLink" style="display: none;">Go to Admin Panel</a>
+    </div>
+
+    <script type="module">
+        /**
+         * Check if CMS is configured
+         */
+        async function checkConfiguration() {
+            try {
+                const response = await fetch('cms-core/config/appSettings.json');
+                if (!response.ok) {
+                    return { configured: false, reason: 'Configuration file not found' };
+                }
+                
+                const appSettings = await response.json();
+                
+                // Check if required fields are set
+                if (!appSettings.GIT_Account || 
+                    appSettings.GIT_Account === 'your-username' || 
+                    appSettings.GIT_Account === '') {
+                    return { configured: false, reason: 'GitHub account not configured' };
+                }
+                
+                if (!appSettings.GIT_Repository || 
+                    appSettings.GIT_Repository === 'your-repo-name' || 
+                    appSettings.GIT_Repository === '') {
+                    return { configured: false, reason: 'Repository not configured' };
+                }
+                
+                // Check if token exists in localStorage
+                const secret = localStorage.getItem('secret');
+                if (!secret) {
+                    return { configured: false, reason: 'GitHub token not found' };
+                }
+                
+                try {
+                    const secretData = JSON.parse(secret);
+                    if (!secretData.token || secretData.token === '') {
+                        return { configured: false, reason: 'GitHub token is empty' };
+                    }
+                } catch (e) {
+                    return { configured: false, reason: 'Invalid token storage format' };
+                }
+                
+                return { configured: true };
+            } catch (error) {
+                return { configured: false, reason: `Configuration check failed: ${error.message}` };
+            }
+        }
+
+        /**
+         * Main check and redirect logic
+         */
+        async function init() {
+            const spinner = document.getElementById('spinner');
+            const message = document.getElementById('message');
+            const setupLink = document.getElementById('setupLink');
+            const adminLink = document.getElementById('adminLink');
+            
+            try {
+                const configCheck = await checkConfiguration();
+                
+                if (configCheck.configured) {
+                    // Already configured - show admin link
+                    spinner.style.display = 'none';
+                    message.textContent = 'CMS is configured and ready!';
+                    adminLink.style.display = 'inline-block';
+                    
+                    // Auto-redirect after 2 seconds
+                    setTimeout(() => {
+                        window.location.href = 'cms-core/admin/index.html';
+                    }, 2000);
+                } else {
+                    // Not configured - redirect to setup
+                    spinner.style.display = 'none';
+                    message.textContent = 'CMS needs to be configured. Redirecting to setup wizard...';
+                    setupLink.style.display = 'inline-block';
+                    
+                    // Auto-redirect after 1 second
+                    setTimeout(() => {
+                        window.location.href = 'cms-core/init/index.html';
+                    }, 1000);
+                }
+            } catch (error) {
+                spinner.style.display = 'none';
+                message.textContent = `Error: ${error.message}`;
+                setupLink.style.display = 'inline-block';
+            }
+        }
+
+        // Run check on page load
+        init();
+    </script>
+</body>
+</html>
+

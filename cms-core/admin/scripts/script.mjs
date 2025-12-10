@@ -5,6 +5,7 @@ import { rerenderer, rederCustomPages } from './rerender.mjs';
 import {doLogin} from './login.mjs'; 
 import { loadModules, mergeContentTypes } from '../../core/moduleLoader.mjs';
 import { registerHooks, executeHook } from '../../core/hooks/hookSystem.mjs';
+import { ensureConfigured } from './configChecker.mjs';
 
 
 /**
@@ -19,6 +20,18 @@ export function routeToCall(){
   let hash = window.location.hash;
  
   switch(true) {
+    /** Configuration check - redirect to setup if not configured **/
+    case !loadSteps.configChecked:
+      ensureConfigured().then(isConfigured => {
+        if (!isConfigured) {
+          // Redirect will happen, don't continue
+          return;
+        }
+        loadSteps.configChecked = true;
+        routeToCall();
+      });
+      return; // Exit early, will continue after redirect check
+    break;
     /** Page loader - init variables **/
     case !utils.getGlobalVariable('appSettings'):
       utils.loadSystemFile( 'appSettings', '../config/appSettings.json' , routeToCall );

@@ -2,14 +2,36 @@
 
 ## Setup
 
+### 🚀 Easy Setup (Recommended)
+
+1. **Open Root URL**
+   - Simply navigate to your site's root URL (e.g., `https://yoursite.com/` or `http://localhost:8000/`)
+   - The system will automatically detect if configuration is needed
+   - You'll be redirected to the setup wizard if not configured
+
+2. **Or Run Setup Wizard Directly**
+   - Open `/cms-core/init/index.html` in your browser
+   - The wizard will guide you through:
+     - Repository configuration
+     - GitHub token setup
+     - Connection testing
+     - Automatic configuration save
+
+3. **That's it!** After the wizard completes, you can access the admin panel.
+
+### 📝 Manual Setup
+
 1. **Configure GitHub Repository**
    Edit `config/appSettings.json`:
    ```json
    {
+     "API_Params": ["your-username", "your-repo-name"],
      "GIT_Account": "your-username",
      "GIT_Repository": "your-repo-name"
    }
    ```
+   
+   See `CONFIGURATION.md` for detailed setup instructions.
 
 2. **Enable Modules**
    Edit `config/modules.json`:
@@ -19,12 +41,20 @@
    }
    ```
 
-3. **Access Admin Panel**
-   Open `/cms-core/admin/index.html` in your browser
+3. **Get GitHub Personal Access Token**
+   - Go to: https://github.com/settings/tokens
+   - Click "Generate new token (classic)"
+   - Name it (e.g., "CMS Builder")
+   - Select **repo** scope (full control)
+   - Generate and **copy the token** (you won't see it again!)
 
-4. **Login**
-   - First time: You'll be prompted to authenticate with GitHub
-   - Enter your GitHub token when prompted
+4. **Access Admin Panel**
+   - Open `/cms-core/admin/index.html` in your browser
+
+5. **Login**
+   - Enter your GitHub username in "Name" field
+   - Paste your Personal Access Token in "Password" field
+   - Click Login
 
 5. **Create Content**
    - Navigate to "Blog Posts" in the sidebar

@@ -104,13 +104,31 @@ Module registry - lists active and disabled modules.
 ### contentTypes.json
 Legacy content types (modules are preferred).
 
-## Usage
+## Quick Start
 
-1. Configure `config/appSettings.json` with your GitHub credentials
-2. Enable modules in `config/modules.json`
-3. Access admin panel at `/cms-core/admin/`
-4. Create content using the admin interface
-5. Content is stored in GitHub and rendered as static HTML
+### Option 1: Setup Wizard (Recommended)
+
+1. **Run Setup Wizard**
+   - Open `/cms-core/init/index.html` in your browser
+   - Follow the step-by-step wizard to configure your CMS
+   - The wizard will test your GitHub token and save configuration
+
+2. **Access Admin Panel**
+   - After setup, go to `/cms-core/admin/index.html`
+   - Start creating content!
+
+### Option 2: Manual Configuration
+
+1. **Configure** `config/appSettings.json` with your GitHub repository
+   - See `CONFIGURATION.md` for detailed setup instructions
+   - You'll need a GitHub Personal Access Token with `repo` scope
+2. **Enable modules** in `config/modules.json`
+3. **Access admin panel** at `/cms-core/admin/index.html`
+4. **Login** with your GitHub username and Personal Access Token
+5. **Create content** using the admin interface
+6. Content is stored in GitHub and rendered as static HTML
+
+For detailed configuration steps, see `CONFIGURATION.md`.
 
 ## Development
 
