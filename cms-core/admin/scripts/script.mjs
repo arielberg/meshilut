@@ -7,6 +7,7 @@ import { loadModules, mergeContentTypes } from '../../core/moduleLoader.mjs';
 import { registerHooks, executeHook } from '../../core/hooks/hookSystem.mjs';
 import { contentTypeManager } from './contentTypeManager.mjs';
 import { ensureConfigured } from './configChecker.mjs';
+import { initNavigation, updateActiveNav } from './navigation.mjs';
 
 
 /**
@@ -107,6 +108,22 @@ export function routeToCall(){
       let params = hash.split('/');
       let contentType = params.shift();
 
+      // Check if content type exists
+      const contentTypes = utils.getGlobalVariable('contentTypes') || [];
+      const contentTypeExists = contentTypes.find(ct => ct.name === contentType);
+      
+      if (!contentTypeExists) {
+        document.getElementById('content').innerHTML = `
+          <div class="alert alert-warning">
+            <h3>Content Type Not Found</h3>
+            <p>The content type "<strong>${contentType}</strong>" does not exist.</p>
+            <p>Please create it first in <a href="#content-types">Content Types</a>.</p>
+            <a href="#content-types" class="btn btn-primary">Go to Content Types</a>
+          </div>
+        `;
+        break;
+      }
+
       // If List is requested
       if( params[0] == 'all') {
         contentList(document.getElementById('content'), contentType );
@@ -126,17 +143,30 @@ export function routeToCall(){
         document.getElementById('content').innerHTML = '';
         document.getElementById('content').appendChild( contentItemForm(contentType ,contentItem , op) );
       })
+      .catch(error => {
+        document.getElementById('content').innerHTML = `
+          <div class="alert alert-danger">
+            <h3>Error Loading Content</h3>
+            <p>${error.message || 'An error occurred while loading the content item.'}</p>
+            <a href="#${contentType}/all" class="btn btn-secondary">Back to List</a>
+            <a href="#content-types" class="btn btn-primary" style="margin-left: 10px;">Content Types</a>
+          </div>
+        `;
+        console.error('Content item loading error:', error);
+      })
       .then( response => {  
-        Array.prototype.forEach.call( document.getElementsByClassName('wysiwyg_element') , function (wysiwyg) {
-          var suneditor = SUNEDITOR.create( wysiwyg.id , {
-            buttonList: [
-                ['undo', 'redo'],
-                ['align', 'horizontalRule', 'list', 'table', 'fontSize'],
-                ["link", "image", "video", "audio"]
-            ],
-          });
-          suneditor.onChange =  wysiwyg.onchange;
-        });        
+        if (response !== undefined) {
+          Array.prototype.forEach.call( document.getElementsByClassName('wysiwyg_element') , function (wysiwyg) {
+            var suneditor = SUNEDITOR.create( wysiwyg.id , {
+              buttonList: [
+                  ['undo', 'redo'],
+                  ['align', 'horizontalRule', 'list', 'table', 'fontSize'],
+                  ["link", "image", "video", "audio"]
+              ],
+            });
+            suneditor.onChange =  wysiwyg.onchange;
+          });        
+        }
       });
 
     break;
@@ -160,7 +190,30 @@ export function routeToCall(){
       location = '';
     break;
     default:
-      document.getElementById('content').innerHTML = '';   
+      // Check if hash looks like a content item route (e.g., #post/new, #article/123)
+      // This handles cases where no content types exist yet or the regex didn't match
+      const hashMatch = hash.match(/^#([^\/]+)\/(.+)$/);
+      if (hashMatch && hashMatch[1] && hashMatch[2]) {
+        const contentType = hashMatch[1];
+        const contentTypes = utils.getGlobalVariable('contentTypes') || [];
+        const contentTypeExists = contentTypes.find(ct => ct.name === contentType);
+        
+        if (!contentTypeExists) {
+          document.getElementById('content').innerHTML = `
+            <div class="alert alert-warning">
+              <h3>Content Type Not Found</h3>
+              <p>The content type "<strong>${contentType}</strong>" does not exist.</p>
+              <p>Please create it first in <a href="#content-types">Content Types</a>.</p>
+              <a href="#content-types" class="btn btn-primary">Go to Content Types</a>
+            </div>
+          `;
+        } else {
+          // Content type exists but route didn't match - try to handle it
+          document.getElementById('content').innerHTML = '';   
+        }
+      } else {
+        document.getElementById('content').innerHTML = '';   
+      }
     break;
   }
 }
@@ -191,8 +244,18 @@ function setupContentTypes() {
         <li><hr/></li>
       `);
     });
+    
+    // Update navigation after content types are added
+    initNavigation();
+    setTimeout(() => {
+      if (typeof updateActiveNav === 'function') {
+        updateActiveNav();
+      }
+    }, 100);
+  } else {
+    // No content types - ensure regex is not set so default case can handle routes
+    regexExpressions.itemManagment = null;
   }
-  routeToCall();
 }
 
 /** Translation interface for 'static' string in pages */
@@ -286,10 +349,12 @@ function translatePage( items ) {
 }
 
 window.onload = function(e) { 
+  initNavigation();
   routeToCall();
 }
 
 
 window.onhashchange = function(){
+  updateActiveNav();
   routeToCall();
 };

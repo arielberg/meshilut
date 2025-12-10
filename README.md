@@ -65,6 +65,11 @@ The CMS uses a modular architecture. See `cms-core/README.md` for details on cre
 ## Structure
 
 - `cms-core/` - Core CMS framework
+  - `admin/` - Admin panel interface
+  - `core/` - Core CMS engine (module loader, hooks)
+  - `modules/` - Pluggable modules
+  - `config/` - Configuration files
+  - `init/` - Setup wizard
 - `site/` - Your site-specific content (generated)
 - `assets/` - Shared assets (CSS, fonts, etc.)
 - `localServer/` - Local development server

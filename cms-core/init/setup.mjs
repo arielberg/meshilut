@@ -52,6 +52,7 @@ async function checkIfAlreadyConfigured() {
                 // Already configured, redirect to admin
                 const returnPath = sessionStorage.getItem('returnAfterSetup') || '../admin/index.html';
                 sessionStorage.removeItem('returnAfterSetup');
+                sessionStorage.setItem('setupJustCompleted', 'true'); // Mark as just completed to bypass check
                 
                 // Show message and redirect
                 const setupContainer = document.querySelector('.setup-container');
@@ -61,11 +62,12 @@ async function checkIfAlreadyConfigured() {
                             <h2>✅ Already Configured</h2>
                             <p class="text-muted">Your CMS is already set up.</p>
                             <p>Redirecting to admin panel...</p>
-                            <a href="${returnPath}" class="btn btn-primary">Go to Admin Panel</a>
+                            <a href="${returnPath}" class="btn btn-primary" onclick="sessionStorage.setItem('setupJustCompleted', 'true')">Go to Admin Panel</a>
                             <a href="?reconfigure=true" class="btn btn-secondary ml-2">Reconfigure</a>
                         </div>
                     `;
                     setTimeout(() => {
+                        sessionStorage.setItem('setupJustCompleted', 'true');
                         window.location.href = returnPath;
                     }, 2000);
                 }
@@ -376,6 +378,10 @@ async function saveViaAPI() {
         if (saveResponse.ok) {
             // Success! Move to completion step
             testResult.innerHTML = '<div class="test-result success"><h5>✅ Configuration saved successfully!</h5><p>Redirecting...</p></div>';
+            
+            // Mark setup as complete in sessionStorage to bypass config check temporarily
+            sessionStorage.setItem('setupJustCompleted', 'true');
+            
             setTimeout(() => {
                 goToStep(4);
                 // Clear return path since we're completing setup

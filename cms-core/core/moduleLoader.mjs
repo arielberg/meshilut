@@ -31,25 +31,88 @@ export async function loadModules() {
  * Load a single module
  */
 async function loadModule(moduleName) {
-  // Path relative to admin/scripts/ where this is imported from
-  const modulePath = `../../modules/${moduleName}`;
+  // Calculate base path from current location
+  const currentPath = window.location.pathname;
+  let basePath = '/cms-core';
+  
+  if (currentPath.includes('/cms-core/admin/')) {
+    basePath = '/cms-core';
+  } else if (currentPath.includes('/admin/')) {
+    basePath = currentPath.substring(0, currentPath.indexOf('/admin'));
+  }
+  
+  let modulePath = null;
+  let moduleConfig = null;
   
   try {
-    // Load module configuration
-    const moduleConfig = await fetch(`${modulePath}/module.json`)
-      .then(res => res.ok ? res.json() : null)
-      .catch(() => null);
+    // Try multiple paths to find module
+    const paths = [
+      `${basePath}/modules/${moduleName}/module.json`,
+      `/cms-core/modules/${moduleName}/module.json`,
+      `../modules/${moduleName}/module.json`,
+      `../../modules/${moduleName}/module.json`
+    ];
+    
+    for (const path of paths) {
+      try {
+        const response = await fetch(path);
+        if (response.ok) {
+          moduleConfig = await response.json();
+          // Determine the correct module path for subsequent loads
+          modulePath = path.replace('/module.json', '');
+          break;
+        }
+      } catch (e) {
+        // Continue to next path
+      }
+    }
     
     if (!moduleConfig) {
-      console.warn(`Module ${moduleName} has no module.json`);
+      console.warn(`Module ${moduleName} has no module.json at path: ${modulePath}`);
       return null;
     }
     
-    // Load content types from module
-    const contentTypes = await loadModuleContentTypes(modulePath);
+    if (!modulePath) {
+      // Fallback to base path
+      modulePath = `${basePath}/modules/${moduleName}`;
+    }
+    
+    // Load content types from module (try multiple paths)
+    const modulePaths = [
+      modulePath,
+      `${basePath}/modules/${moduleName}`,
+      `/cms-core/modules/${moduleName}`,
+      `../modules/${moduleName}`,
+      `../../modules/${moduleName}`
+    ];
+    
+    let contentTypes = [];
+    for (const path of modulePaths) {
+      const result = await loadModuleContentTypes(path);
+      if (result && Array.isArray(result) && result.length > 0) {
+        contentTypes = result;
+        break;
+      }
+    }
     
     // Load hooks from module
-    const hooks = await loadModuleHooks(modulePath);
+    let hooks = {};
+    const hookPaths = [
+      `${basePath}/modules/${moduleName}/hooks.mjs`,
+      `/cms-core/modules/${moduleName}/hooks.mjs`,
+      `../modules/${moduleName}/hooks.mjs`,
+      `../../modules/${moduleName}/hooks.mjs`
+    ];
+    
+    for (const hookPath of hookPaths) {
+      try {
+        const hookModule = await import(hookPath);
+        hooks = hookModule.hooks || {};
+        break; // Success, exit loop
+      } catch (e) {
+        // Continue to next path
+      }
+    }
     
     // Load templates from module
     const templates = await loadModuleTemplates(modulePath);
@@ -74,11 +137,14 @@ async function loadModule(moduleName) {
 async function loadModuleContentTypes(modulePath) {
   try {
     const response = await fetch(`${modulePath}/contentTypes.json`);
-    if (!response.ok) return [];
-    return await response.json();
+    if (response.ok) {
+      const data = await response.json();
+      return Array.isArray(data) ? data : [];
+    }
+    return null;
   } catch (error) {
     // Module may not have contentTypes.json
-    return [];
+    return null;
   }
 }
 
@@ -87,11 +153,14 @@ async function loadModuleContentTypes(modulePath) {
  */
 async function loadModuleHooks(modulePath) {
   try {
+    // Try to import hooks - need to construct proper import path
+    // Since we can't use dynamic imports with relative paths easily,
+    // we'll return empty and let the caller handle multiple attempts
     const module = await import(`${modulePath}/hooks.mjs`);
     return module.hooks || {};
   } catch (error) {
-    // Module may not have hooks
-    return {};
+    // Module may not have hooks - return null to indicate failure
+    throw error;
   }
 }
 
@@ -110,14 +179,42 @@ async function loadModuleTemplates(modulePath) {
  */
 async function getModuleRegistry() {
   try {
-    // Path relative to admin/scripts/ where this is imported from
-    const response = await fetch('../../config/modules.json');
-    if (!response.ok) {
-      // Return default registry if file doesn't exist
-      return { active: [], disabled: [] };
+    // Calculate path based on current location
+    const currentPath = window.location.pathname;
+    let basePath = '';
+    
+    // Determine base path from current URL
+    if (currentPath.includes('/cms-core/admin/')) {
+      basePath = '/cms-core';
+    } else if (currentPath.includes('/admin/')) {
+      basePath = currentPath.substring(0, currentPath.indexOf('/admin'));
+    } else {
+      basePath = '/cms-core';
     }
-    return await response.json();
+    
+    // Try multiple paths
+    const paths = [
+      `${basePath}/config/modules.json`,
+      '/cms-core/config/modules.json',
+      '../config/modules.json',
+      '../../config/modules.json'
+    ];
+    
+    for (const path of paths) {
+      try {
+        const response = await fetch(path);
+        if (response.ok) {
+          return await response.json();
+        }
+      } catch (e) {
+        // Continue to next path
+      }
+    }
+    
+    // Return default registry if file doesn't exist
+    return { active: [], disabled: [] };
   } catch (error) {
+    console.warn('Could not load modules.json:', error);
     return { active: [], disabled: [] };
   }
 }

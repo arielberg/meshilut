@@ -260,14 +260,24 @@
             </div>
             
             <div class="text-center mt-4">
-                <a href="../admin/index.html" class="btn btn-primary btn-lg" id="adminLink">Go to Admin Panel</a>
+                <a href="../admin/index.html" class="btn btn-primary btn-lg" id="adminLink" onclick="window.markSetupComplete(event)">Go to Admin Panel</a>
             </div>
             <script>
+                // Mark setup as complete when clicking admin link
+                window.markSetupComplete = function(event) {
+                    sessionStorage.setItem('setupJustCompleted', 'true');
+                    // Let the link navigate normally
+                };
+                
                 // Use return path if available
                 document.addEventListener('DOMContentLoaded', () => {
                     const returnPath = sessionStorage.getItem('returnAfterSetup');
                     if (returnPath) {
-                        document.getElementById('adminLink').href = returnPath;
+                        const link = document.getElementById('adminLink');
+                        if (link) {
+                            link.href = returnPath;
+                            link.onclick = window.markSetupComplete;
+                        }
                         sessionStorage.removeItem('returnAfterSetup');
                     }
                 });

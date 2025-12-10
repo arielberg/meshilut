@@ -8,7 +8,16 @@
  */
 export async function checkConfiguration() {
   try {
-    const response = await fetch('../config/appSettings.json');
+    // Try multiple paths to find the config file
+    let response = await fetch('../config/appSettings.json');
+    if (!response.ok) {
+      // Try alternative path
+      response = await fetch('../../config/appSettings.json');
+    }
+    if (!response.ok) {
+      // Try absolute path from root
+      response = await fetch('/cms-core/config/appSettings.json');
+    }
     if (!response.ok) {
       return { configured: false, reason: 'appSettings.json not found' };
     }
@@ -54,6 +63,12 @@ export async function checkConfiguration() {
  * Redirect to setup wizard if not configured
  */
 export async function ensureConfigured() {
+  // If setup was just completed, skip the check temporarily
+  if (sessionStorage.getItem('setupJustCompleted') === 'true') {
+    sessionStorage.removeItem('setupJustCompleted');
+    return true; // Allow access, config was just saved
+  }
+  
   const configCheck = await checkConfiguration();
   
   if (!configCheck.configured) {
