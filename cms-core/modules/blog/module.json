@@ -5,7 +5,6 @@
   "author": "CMS Builder",
   "dependencies": [],
   "provides": {
-    "contentTypes": ["post"],
     "templates": ["post-list.html", "post-detail.html"],
     "hooks": ["beforeRender", "afterSave"]
   }

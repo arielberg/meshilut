@@ -5,6 +5,7 @@ import { rerenderer, rederCustomPages } from './rerender.mjs';
 import {doLogin} from './login.mjs'; 
 import { loadModules, mergeContentTypes } from '../../core/moduleLoader.mjs';
 import { registerHooks, executeHook } from '../../core/hooks/hookSystem.mjs';
+import { contentTypeManager } from './contentTypeManager.mjs';
 import { ensureConfigured } from './configChecker.mjs';
 
 
@@ -77,12 +78,13 @@ export function routeToCall(){
           // Merge content types from modules
           const moduleContentTypes = mergeContentTypes(modules);
           
-          // Also load content types from config (for backward compatibility)
+          // Load content types from config (primary source for dynamic types)
           utils.loadSystemFile( 'configContentTypes', '../config/contentTypes.json', function(){
             const configContentTypes = utils.getGlobalVariable('configContentTypes') || [];
             
             // Combine module content types with config content types
-            const allContentTypes = [...moduleContentTypes, ...configContentTypes];
+            // Config content types take precedence (for dynamic management)
+            const allContentTypes = [...configContentTypes, ...moduleContentTypes];
             utils.setGlobalVariable('contentTypes', allContentTypes);
             
             // Continue with content type setup
@@ -137,6 +139,9 @@ export function routeToCall(){
         });        
       });
 
+    break;
+    case '#content-types'==hash:
+      contentTypeManager(document.getElementById('content'));
     break;
     case '#menu'==hash:
     case '#menus'==hash:
